@@ -5,10 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon app.js",
-    "start": "node -r dotenv/config build/app.js",
-    "clean": "rm -rf build && mkdir build",
-    "build": "npm run clean && babel src -d build"
+    "start": "nodemon app.js"
   },
   "keywords": [],
   "author": "",
