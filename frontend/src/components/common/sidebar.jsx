@@ -48,24 +48,53 @@ const Sidebar = () => {
         display: "flex",
         flexDirection: "column",
         height: "100%",
+        bgcolor: "#f8f9fa", // Light background for a clean look
+        borderRight: "1px solid #ddd", // Subtle border for separation
       }}
     >
+      {/* Trust Name */}
       <Typography
         variant="h6"
-        sx={{ textAlign: "center", fontWeight: "bold", mt: 2 }}
+        sx={{
+          textAlign: "center",
+          fontWeight: "bold",
+          mt: 2,
+          color: "#2e7d32", // Dark green color
+        }}
       >
         Salafiya Education & Welfare Trust
       </Typography>
+  
+      {/* Location */}
       <Typography
         variant="caption"
-        sx={{ textAlign: "center", display: "block" }}
+        sx={{
+          textAlign: "center",
+          display: "block",
+          color: "#666",
+          fontSize: "0.85rem",
+          fontWeight: 500,
+          mt: 0.5,
+        }}
       >
         Solapur
       </Typography>
-
+  
+      {/* Styled Horizontal Rule */}
+      <Box sx={{ width: "80%", mx: "auto", my: 1 }}>
+        <hr
+          style={{
+            border: "none",
+            borderTop: "2px solid #2e7d32",
+            opacity: 0.6,
+          }}
+        />
+      </Box>
+  
+      {/* Sidebar Menu */}
       <List sx={{ mt: 2 }}>
         {[
-          { text: "Home", path: "/dashboard" },
+          { text: "Donor Details", path: "/dashboard" },
           { text: "Add Donor", path: "/add-donor" },
         ].map((item, index) => (
           <ListItem
@@ -75,15 +104,29 @@ const Sidebar = () => {
             sx={{
               bgcolor: location.pathname === item.path ? "#2e7d3275" : "inherit",
               cursor: "pointer",
+              borderRadius: 2,
+              my: 0.5,
+              transition: "0.3s",
+              "&:hover": {
+                bgcolor: "#2e7d3220",
+              },
             }}
           >
-            <ListItemText primary={item.text} />
+            <ListItemText
+              primary={item.text}
+              primaryTypographyProps={{
+                fontSize: "1rem",
+                fontWeight: location.pathname === item.path ? "bold" : "normal",
+              }}
+            />
           </ListItem>
         ))}
       </List>
-
+  
+      {/* Push Logout Button to Bottom */}
       <Box sx={{ flexGrow: 1 }} />
-
+  
+      {/* Logout Button */}
       <Button
         color="error"
         sx={{
@@ -93,6 +136,11 @@ const Sidebar = () => {
           gap: 1,
           p: 1.5,
           borderRadius: 2,
+          fontWeight: "bold",
+          bgcolor: "#ffebee",
+          "&:hover": {
+            bgcolor: "#ffcdd2",
+          },
         }}
         startIcon={<LogoutIcon />}
         onClick={() => setOpenLogoutDialog(true)}
@@ -101,6 +149,7 @@ const Sidebar = () => {
       </Button>
     </Box>
   );
+  
 
   return (
     <>

@@ -9,6 +9,8 @@ import {
   Paper,
   TextField,
   Typography,
+  Checkbox,
+  FormControlLabel,
 } from "@mui/material";
 import Sidebar from "../../common/sidebar";
 import moment from "moment";
@@ -72,6 +74,19 @@ const DonorView = () => {
   const [mobile, setMobile] = useState(Array(10).fill(""));
   const [donorName, setDonorName] = useState("");
   const [donorAddress, setDonorAddress] = useState("");
+  const [amountReceived, setAmountReceived] = useState("");
+  const [financialYear, setFinancialYear] = useState("");
+  const [typeDonation, setTypeDonation] = useState({
+    corpus: false,
+    specificGrants: false,
+    others: false,
+  });
+  const [deductionSection, setDeductionSection] = useState({
+    section80G: false,
+    section35_1_ii: false,
+    section35_1_iia: false,
+    section35_1_iii: false,
+  });
 
   const fetchData = async () => {
     setLoading(true);
@@ -97,6 +112,19 @@ const DonorView = () => {
       setMobile(Array(10).fill(""));
       setDonorName("");
       setDonorAddress("");
+      setAmountReceived("");
+      setFinancialYear("");
+      setTypeDonation({
+        corpus: false,
+        specificGrants: false,
+        others: false,
+      });
+      setDeductionSection({
+        section80G: false,
+        section35_1_ii: false,
+        section35_1_iia: false,
+        section35_1_iii: false,
+      });
     } else {
       setDate(moment.utc(donorData?.approval_date).format("YYYY-MM-DD"));
       setPan(
@@ -116,6 +144,22 @@ const DonorView = () => {
       );
       setDonorName(donorData?.donor_name || "");
       setDonorAddress(donorData?.donor_address || "");
+      setAmountReceived(donorData?.donation_received || "");
+      setFinancialYear(donorData?.financial_year || "");
+      const typeDonation = donorData.donation_type
+        ? donorData.donation_type.split(",").reduce((acc, key) => {
+            acc[key] = true;
+            return acc;
+          }, {})
+        : {};
+      setTypeDonation(typeDonation);
+      const deductionSection = donorData.donation_section
+        ? donorData.donation_section.split(",").reduce((acc, key) => {
+            acc[key] = true;
+            return acc;
+          }, {})
+        : {};
+      setDeductionSection(deductionSection);
     }
   }, [donorData]);
 
@@ -309,6 +353,113 @@ const DonorView = () => {
                         disabled={true}
                       />
                     </Box>
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={2} sx={{ mt: 1 }}>
+                  <Grid item xs={12} sm={4}>
+                    <Typography>Amount of Donation Received:</Typography>
+                  </Grid>
+                  <Grid item xs={12} sm={8}>
+                    <TextField
+                      fullWidth
+                      size="small"
+                      value={amountReceived}
+                      disabled={true}
+                    />
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={2} sx={{ mt: 1 }}>
+                  <Grid item xs={12} sm={4}>
+                    <Typography>Financial Year:</Typography>
+                  </Grid>
+                  <Grid item xs={12} sm={8}>
+                    <TextField
+                      fullWidth
+                      size="small"
+                      value={financialYear}
+                      disabled={true}
+                    />
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={2} sx={{ mt: 1 }}>
+                  <Grid item xs={12} sm={4}>
+                    <Typography>Type of Donation:</Typography>
+                  </Grid>
+                  <Grid item xs={12} sm={8}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={typeDonation.corpus}
+                          disabled={true}
+                        />
+                      }
+                      label="Corpus"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={typeDonation.specificGrants}
+                          disabled={true}
+                        />
+                      }
+                      label="Specific Grants"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={typeDonation.others}
+                          disabled={true}
+                        />
+                      }
+                      label="Others"
+                    />
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={2} sx={{ mt: 1 }}>
+                  <Grid item xs={12} sm={4}>
+                    <Typography>Section Eligible for Deduction:</Typography>
+                  </Grid>
+                  <Grid item xs={12} sm={8}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={deductionSection.section80G}
+                          disabled={true}
+                        />
+                      }
+                      label="Section 80G(5)(vi)"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={deductionSection.section35_1_ii}
+                          disabled={true}
+                        />
+                      }
+                      label="Section 35(1)(ii)"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={deductionSection.section35_1_iia}
+                          disabled={true}
+                        />
+                      }
+                      label="Section 35(1)(iia)"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={deductionSection.section35_1_iii}
+                          disabled={true}
+                        />
+                      }
+                      label="Section 35(1)(iii)"
+                    />
                   </Grid>
                 </Grid>
 

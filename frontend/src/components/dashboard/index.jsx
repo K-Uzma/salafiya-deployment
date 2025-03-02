@@ -15,6 +15,8 @@ const Dashboard = () => {
           overflow: "hidden",
           display: "flex",
           flexDirection: "column",
+          paddingLeft: "0px !important",
+          paddingRight: "0px !important",
         }}
       >
         <DonorList />

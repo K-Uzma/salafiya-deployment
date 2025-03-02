@@ -2,10 +2,10 @@ const mysql = require("mysql2/promise");
 
 //for local
 const pool = mysql.createPool({
-  host: "byhrkgo8wmzugrxr4xvi-mysql.services.clever-cloud.com",
-  user: "usnukubpjknulnzr",
-  password: "02zD0OQ7TUsF2ockAlLc",
-  database: "byhrkgo8wmzugrxr4xvi",
+  host: "localhost",
+  user: "root",
+  password: "",
+  database: "salafiya_campus",
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,

@@ -9,7 +9,7 @@ import {
   Tooltip,
   useMediaQuery,
 } from "@mui/material";
-import { FileDownload, Visibility } from "@mui/icons-material";
+import { Add, FileDownload, Visibility } from "@mui/icons-material";
 import * as XLSX from "xlsx";
 import { DonorsList } from "../../../api/modules/donorModule";
 import { useNavigate } from "react-router-dom";
@@ -21,6 +21,10 @@ const DonorList = () => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const handleNavigate = () => {
+    navigate("/add-donor");
+  };
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -117,7 +121,6 @@ const DonorList = () => {
         flexGrow: 1,
         overflow: "hidden",
         width: "100%",
-        boxShadow: "none",
       }}
     >
       <MaterialReactTable
@@ -126,28 +129,43 @@ const DonorList = () => {
         enablePagination
         enableSorting
         enableColumnFilters
-        enableDensityToggle={!isMobile} // Hide density toggle on mobile
+        enableDensityToggle={!isMobile}
         muiTableContainerProps={{
           sx: {
             maxHeight: "calc(100vh - 180px)",
             overflowX: "auto",
             overflowY: "auto",
-            minWidth: isMobile ? "100%" : "1000px", // Adjust for mobile
-            boxShadow: "none",
+            minWidth: isMobile ? "100%" : "1000px",
+            backgroundColor: "#f8f9fa", // Background for table container
           },
         }}
-        muiTableBodyCellProps={{
+        muiTablePaperProps={{
           sx: {
-            fontSize: isMobile ? "0.75rem" : "0.875rem", // Reduce font size on mobile
-            padding: isMobile ? "6px" : "12px", // Adjust cell padding
-            whiteSpace: isMobile ? "normal" : "nowrap", // Prevent overflow
-            wordBreak: "break-word", // Ensure text wrapping
+            boxShadow: "none",
           },
         }}
         muiTableHeadCellProps={{
           sx: {
             fontSize: isMobile ? "0.75rem" : "0.875rem",
             padding: isMobile ? "6px" : "12px",
+            fontWeight: "bold",
+          },
+        }}
+        muiTableBodyCellProps={{
+          sx: {
+            fontSize: isMobile ? "0.75rem" : "0.875rem",
+            padding: isMobile ? "6px" : "12px",
+            whiteSpace: isMobile ? "normal" : "nowrap",
+            wordBreak: "break-word",
+            backgroundColor: "#f8f9fa", // Row background
+          },
+        }}
+        muiTableBodyRowProps={{
+          sx: {
+            backgroundColor: "#f8f9fa", // Apply to all rows
+            "&:hover": {
+              backgroundColor: "#e8e8e8", // Slight hover effect
+            },
           },
         }}
         renderTopToolbarCustomActions={() => (
@@ -157,6 +175,8 @@ const DonorList = () => {
               gap: "10px",
               flexWrap: isMobile ? "wrap" : "nowrap",
               justifyContent: isMobile ? "center" : "flex-start",
+              padding: "8px",
+              borderRadius: "8px",
             }}
           >
             <Button
@@ -167,10 +187,23 @@ const DonorList = () => {
               sx={{
                 px: 2,
                 py: 0.5,
-                fontSize: isMobile ? "0.65rem" : "0.75rem", // Adjust button size
+                fontSize: isMobile ? "0.65rem" : "0.75rem",
               }}
             >
               Export Excel
+            </Button>
+            <Button
+              variant="contained"
+              startIcon={<Add />}
+              onClick={handleNavigate}
+              size="small"
+              sx={{
+                px: 2,
+                py: 0.5,
+                fontSize: isMobile ? "0.65rem" : "0.75rem",
+              }}
+            >
+              Add Donor
             </Button>
           </Box>
         )}
