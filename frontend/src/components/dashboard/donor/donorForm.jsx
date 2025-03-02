@@ -321,11 +321,11 @@ const DonorForm = () => {
               <Grid item xs={12} sm={8}>
                 {/* PAN */}
                 <Grid container spacing={1} alignItems="center">
-                  <Grid item xs={2}>
+                  <Grid item xs={12} sm={2}>
                     <Typography>PAN:</Typography>
                   </Grid>
-                  <Grid item xs={10}>
-                    <Box sx={{ display: "flex", gap: 0.5 }}>
+                  <Grid item xs={12} sm={10}>
+                    <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}>
                       {pan.map((char, index) => (
                         <TextField
                           key={index}
@@ -335,7 +335,8 @@ const DonorForm = () => {
                           onKeyDown={handleKeyDown(index, setPan, panRefs)}
                           size="small"
                           sx={{
-                            width: "30px",
+                            width: { xs: "8%", sm: "30px" },
+                            minWidth: "25px",
                             textAlign: "center",
                             "& .MuiInputBase-input": {
                               textAlign: "center",
@@ -351,11 +352,11 @@ const DonorForm = () => {
 
                 {/* Aadhar */}
                 <Grid container spacing={1} alignItems="center" sx={{ mt: 1 }}>
-                  <Grid item xs={2}>
+                  <Grid item xs={12} sm={2}>
                     <Typography>Aadhar:</Typography>
                   </Grid>
-                  <Grid item xs={10}>
-                    <Box sx={{ display: "flex", gap: 0.5 }}>
+                  <Grid item xs={12} sm={10}>
+                    <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}>
                       {aadhar.map((char, index) => (
                         <TextField
                           key={index}
@@ -374,7 +375,8 @@ const DonorForm = () => {
                           )}
                           size="small"
                           sx={{
-                            width: "30px",
+                            width: { xs: "7%", sm: "30px" },
+                            minWidth: "25px",
                             textAlign: "center",
                             "& .MuiInputBase-input": {
                               textAlign: "center",
@@ -390,11 +392,11 @@ const DonorForm = () => {
 
                 {/* Mobile */}
                 <Grid container spacing={1} alignItems="center" sx={{ mt: 1 }}>
-                  <Grid item xs={2}>
+                  <Grid item xs={12} sm={2}>
                     <Typography>Mobile:</Typography>
                   </Grid>
-                  <Grid item xs={10}>
-                    <Box sx={{ display: "flex", gap: 0.5 }}>
+                  <Grid item xs={12} sm={10}>
+                    <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}>
                       {mobile.map((char, index) => (
                         <TextField
                           key={index}
@@ -413,7 +415,8 @@ const DonorForm = () => {
                           )}
                           size="small"
                           sx={{
-                            width: "30px",
+                            width: { xs: "9%", sm: "30px" },
+                            minWidth: "25px",
                             textAlign: "center",
                             "& .MuiInputBase-input": {
                               textAlign: "center",

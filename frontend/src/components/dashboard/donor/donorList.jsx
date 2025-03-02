@@ -14,6 +14,7 @@ import * as XLSX from "xlsx";
 import { DonorsList } from "../../../api/modules/donorModule";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
+import moment from "moment";
 
 const DonorList = () => {
   const theme = useTheme();
@@ -41,6 +42,30 @@ const DonorList = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  const formatDonationType = (donationType) => {
+    return donationType
+      .replace(/([a-z])([A-Z])/g, "$1 $2") // Add space before capital letters
+      .replace(/,/g, ", ") // Add space after commas
+      .toLowerCase() // Convert everything to lowercase
+      .replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize each word
+  };
+
+  const sectionMapping = {
+    section80G: "Section 80G(5)(vi)",
+    section35_1_ii: "Section 35(1)(ii)",
+    section35_1_iia: "Section 35(1)(iia)",
+    section35_1_iii: "Section 35(1)(iii)",
+  };
+
+  const formatDonationSection = (sectionStr) => {
+    return sectionStr
+      .split(",") // Split multiple values
+      .map((section) => sectionMapping[section] || section) // Replace with mapped value
+      .join(", "); // Join back with a comma and space
+  };
+
+  const formatDate = (date) => moment(date).format("YYYY-MM-DD");
 
   // Column Definitions
   const columns = useMemo(
@@ -93,6 +118,39 @@ const DonorList = () => {
         muiTableHeadCellProps: { sx: { width: "180px" } },
         muiTableBodyCellProps: { sx: { width: "180px" } },
       },
+      {
+        accessorKey: "donation_received",
+        header: "Donation Received",
+        muiTableHeadCellProps: { sx: { width: "80px" } },
+        muiTableBodyCellProps: { sx: { width: "80px" } },
+      },
+      {
+        accessorKey: "financial_year",
+        header: "Financial Year",
+        muiTableHeadCellProps: { sx: { width: "80px" } },
+        muiTableBodyCellProps: { sx: { width: "80px" } },
+      },
+      {
+        accessorKey: "donation_type",
+        header: "Type of Donation",
+        muiTableHeadCellProps: { sx: { width: "100px" } },
+        muiTableBodyCellProps: { sx: { width: "100px" } },
+        Cell: ({ cell }) => formatDonationType(cell.getValue()), // Use function in Cell
+      },
+      {
+        accessorKey: "donation_section",
+        header: "Section Eligible for Deduction",
+        muiTableHeadCellProps: { sx: { width: "130px" } },
+        muiTableBodyCellProps: { sx: { width: "130px" } },
+        Cell: ({ cell }) => formatDonationSection(cell.getValue()), // Use function in Cell
+      },
+      {
+        accessorKey: "approval_date",
+        header: "Approval Date",
+        muiTableHeadCellProps: { sx: { width: "130px" } },
+        muiTableBodyCellProps: { sx: { width: "130px" } },
+        Cell: ({ cell }) => formatDate(cell.getValue()), // Format in the table cell
+      },
     ],
     []
   );
@@ -105,6 +163,13 @@ const DonorList = () => {
       "Aadhar Number": item.aadhar_id,
       "Phone Number": item.mobile,
       Address: item.donor_address,
+      "Donation Received": item.donation_received,
+      "Financial Year": item.financial_year,
+      "Type of Donation": formatDonationType(item.donation_type),
+      "Section Eligible for Deduction": formatDonationSection(
+        item.donation_section
+      ),
+      "Approval Date": formatDate(item.approval_date),
     }));
 
     const ws = XLSX.utils.json_to_sheet(formattedData);
