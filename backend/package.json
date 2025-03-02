@@ -8,7 +8,7 @@
     "dev": "nodemon app.js",
     "start": "node -r dotenv/config build/app.js",
     "clean": "rm -rf build && mkdir build",
-    "build": "npm run clean && babel src -d build"
+    "build": "npx babel src -d dist"
   },
   "keywords": [],
   "author": "",
