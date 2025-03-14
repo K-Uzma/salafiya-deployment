@@ -12,7 +12,6 @@ import {
   Checkbox,
   FormControlLabel,
 } from "@mui/material";
-import Sidebar from "../../common/sidebar";
 import { DonorDetailByID } from "../../../api/modules/donorModule";
 import { useLocation, useNavigate } from "react-router-dom";
 import AdminInfo from "./adminInfo";
@@ -122,60 +121,23 @@ const DonorPrint = () => {
     }
   }, [donorData]);
 
-  const handleAfterPrint = () => {
-    navigate(-1); // Navigate back after print
-  };
-
-  const handlePrintPage = () => {
-    const printContents = printRef.current.innerHTML;
-    const iframe = document.createElement("iframe");
-    iframe.style.position = "absolute";
-    iframe.style.width = "0px";
-    iframe.style.height = "0px";
-    iframe.style.border = "none";
-
-    document.body.appendChild(iframe);
-    const doc = iframe.contentWindow.document;
-
-    // Copy styles from main page
-    const styles = [...document.styleSheets]
-      .map((sheet) => {
-        try {
-          return [...sheet.cssRules].map((rule) => rule.cssText).join("\n");
-        } catch (e) {
-          return "";
-        }
-      })
-      .join("\n");
-
-    doc.open();
-    doc.write(`
-      <html>
-        <head>
-          <title>Print</title>
-          <style>${styles}</style>
-        </head>
-        <body>${printContents}</body>
-      </html>
-    `);
-    doc.close();
-
-    iframe.contentWindow.focus();
-    iframe.contentWindow.print();
-
-    setTimeout(() => {
-      document.body.removeChild(iframe);
-      handleAfterPrint();
-    }, 1000); // Cleanup after printing
-  };
+  // const handleAfterPrint = () => {
+  //   navigate(-1); // Navigate back after print
+  // };
 
   useEffect(() => {
     if (Object.keys(donorData).length !== 0) {
       // handlePrintPage();
+      const handleAfterPrint = () => {
+        navigate(-1); // Navigate back to previous page (One.jsx)
+      };
+
+      // Print the page
       window.print();
 
       // Listen for print cancel or complete
       window.addEventListener("afterprint", handleAfterPrint);
+
       return () => {
         window.removeEventListener("afterprint", handleAfterPrint);
       };
@@ -221,7 +183,7 @@ const DonorPrint = () => {
         ) : (
           <>
             <Paper elevation={3} sx={{ p: 3, textAlign: "start" }}>
-              <div ref={printRef} id="print-content">
+              <div id="print-content">
                 <Box
                   sx={{
                     border: "1px solid black", // Border styling
