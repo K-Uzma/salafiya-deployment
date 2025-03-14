@@ -482,14 +482,9 @@ const DonorPrint = () => {
                   width: 100%;
                   height: 100%;
                 }
-                
-                /* Hide Sidebar */
-                .sidebar, .menu, .navbar {
-                  display: none !important;
-                }
 
-                /* Hide any unwanted elements */
-                header, footer, nav {
+                /* Hide Sidebar */
+                .MuiDrawer-root, .MuiDrawer-paper {
                   display: none !important;
                 }
               }
