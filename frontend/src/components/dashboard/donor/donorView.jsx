@@ -11,7 +11,9 @@ import {
   Typography,
   Checkbox,
   FormControlLabel,
+  useMediaQuery,
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import Sidebar from "../../common/sidebar";
 import { DonorDetailByID } from "../../../api/modules/donorModule";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -20,57 +22,63 @@ import AdminInfo from "./adminInfo";
 const DonorView = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const donorId = location.state?.donorId || 0; // Get donor ID from state
-
-  const handlePrint = () => {
-    navigate("/print-donor", {
-      state: { donorId: location.state?.donorId || 0 },
-    });
-  };
 
   const printRef = useRef();
 
-  // const handlePrint = () => {
-  //   const printContents = printRef.current.innerHTML;
-  //   const iframe = document.createElement("iframe");
-  //   iframe.style.position = "absolute";
-  //   iframe.style.width = "0px";
-  //   iframe.style.height = "0px";
-  //   iframe.style.border = "none";
+  const handlePrintPage = () => {
+    const printContents = printRef.current.innerHTML;
+    const iframe = document.createElement("iframe");
+    iframe.style.position = "absolute";
+    iframe.style.width = "0px";
+    iframe.style.height = "0px";
+    iframe.style.border = "none";
 
-  //   document.body.appendChild(iframe);
-  //   const doc = iframe.contentWindow.document;
+    document.body.appendChild(iframe);
+    const doc = iframe.contentWindow.document;
 
-  //   // Copy styles from main page
-  //   const styles = [...document.styleSheets]
-  //     .map((sheet) => {
-  //       try {
-  //         return [...sheet.cssRules].map((rule) => rule.cssText).join("\n");
-  //       } catch (e) {
-  //         return "";
-  //       }
-  //     })
-  //     .join("\n");
+    // Copy styles from main page
+    const styles = [...document.styleSheets]
+      .map((sheet) => {
+        try {
+          return [...sheet.cssRules].map((rule) => rule.cssText).join("\n");
+        } catch (e) {
+          return "";
+        }
+      })
+      .join("\n");
 
-  //   doc.open();
-  //   doc.write(`
-  //     <html>
-  //       <head>
-  //         <title>Print</title>
-  //         <style>${styles}</style>
-  //       </head>
-  //       <body>${printContents}</body>
-  //     </html>
-  //   `);
-  //   doc.close();
+    doc.open();
+    doc.write(`
+      <html>
+        <head>
+          <title>Print</title>
+          <style>${styles}</style>
+        </head>
+        <body>${printContents}</body>
+      </html>
+    `);
+    doc.close();
 
-  //   iframe.contentWindow.focus();
-  //   iframe.contentWindow.print();
+    iframe.contentWindow.focus();
+    iframe.contentWindow.print();
 
-  //   setTimeout(() => {
-  //     document.body.removeChild(iframe);
-  //   }, 1000); // Cleanup after printing
-  // };
+    setTimeout(() => {
+      document.body.removeChild(iframe);
+    }, 1000); // Cleanup after printing
+  };
+
+  const handlePrint = () => {
+    if (isMobile) {
+      navigate("/print-donor", {
+        state: { donorId: location.state?.donorId || 0 },
+      });
+    } else {
+      handlePrintPage();
+    }
+  };
 
   const [donorData, setDonorData] = useState({});
   const [loading, setLoading] = useState(false);

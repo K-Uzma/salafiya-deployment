@@ -172,12 +172,6 @@ const DonorPrint = () => {
   useEffect(() => {
     if (Object.keys(donorData).length !== 0) {
       handlePrintPage();
-
-      // // Listen for print cancel or complete
-      // window.addEventListener("afterprint", handleAfterPrint);
-      // return () => {
-      //   window.removeEventListener("afterprint", handleAfterPrint);
-      // };
     }
   }, [donorName, donorAddress, amountReceived, financialYear]);
 
