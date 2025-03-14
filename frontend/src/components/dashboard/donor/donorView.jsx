@@ -11,9 +11,7 @@ import {
   Typography,
   Checkbox,
   FormControlLabel,
-  useMediaQuery,
 } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
 import Sidebar from "../../common/sidebar";
 import moment from "moment";
 import { DonorDetailByID } from "../../../api/modules/donorModule";
@@ -22,8 +20,6 @@ import AdminInfo from "./adminInfo";
 import "./donorView.css";
 
 const DonorView = () => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [printBtnPress, setPrintBtnPress] = useState(false);
   const printRef = useRef();
 
@@ -195,7 +191,7 @@ const DonorView = () => {
   ) : (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      {!printBtnPress && !isMobile && <Sidebar className="sidebar" />}
+      {!printBtnPress && <Sidebar className="sidebar" />}
       <Container sx={{ flexGrow: 1 }}>
         {Object.keys(donorData).length === 0 ? (
           <Box
