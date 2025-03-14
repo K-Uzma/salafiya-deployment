@@ -24,22 +24,33 @@ const adminInfo = () => {
 
   return (
     <>
-      <Typography variant="h6" sx={{ fontWeight: "bold", mb: 1, fontSize:'18px' }}>
+      <Typography
+        variant="h6"
+        sx={{
+          fontWeight: "bold",
+          mb: 1,
+          fontSize: "16px",
+          textAlign: "center",
+        }}
+      >
         FORM NO. 10BE
       </Typography>
 
       <hr />
 
-      <Typography variant="body2" sx={{ mb: 1, fontSize:'13px' }}>
-        Certificate of donation under clause (ix) of sub-section
-        (5) of section 80G and under clause (ii) to sub-section (1A) of section
-        35 of the Income-tax Act, 1961
+      <Typography variant="body2" sx={{ mb: 1, fontSize: "12px" }}>
+        Certificate of donation under clause (ix) of sub-section (5) of section
+        80G and under clause (ii) to sub-section (1A) of section 35 of the
+        Income-tax Act, 1961
       </Typography>
 
       <hr />
 
       {/* Reporting Person Information */}
-      <Typography variant="h6" sx={{ fontWeight: "bold", mt: 0.2 , fontSize:'17px'}}>
+      <Typography
+        variant="h6"
+        sx={{ fontWeight: "bold", mt: 0.2, fontSize: "16px" }}
+      >
         Donee
       </Typography>
 

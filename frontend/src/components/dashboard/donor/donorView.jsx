@@ -68,7 +68,8 @@ const DonorView = () => {
 
   const [donorData, setDonorData] = useState({});
   const [loading, setLoading] = useState(false);
-  const [date, setDate] = useState(moment().format("YYYY-MM-DD"));
+  // const [date, setDate] = useState(moment().format("YYYY-MM-DD"));
+  const [date, setDate] = useState("2022-12-08");
   const [pan, setPan] = useState(Array(10).fill(""));
   const [aadhar, setAadhar] = useState(Array(12).fill(""));
   const [mobile, setMobile] = useState(Array(10).fill(""));
@@ -106,7 +107,7 @@ const DonorView = () => {
 
   useEffect(() => {
     if (Object.keys(donorData).length === 0) {
-      setDate(moment().format("YYYY-MM-DD"));
+      setDate("2022-12-08");
       setPan(Array(10).fill(""));
       setAadhar(Array(12).fill(""));
       setMobile(Array(10).fill(""));
@@ -126,7 +127,7 @@ const DonorView = () => {
         section35_1_iii: false,
       });
     } else {
-      setDate(moment.utc(donorData?.approval_date).format("YYYY-MM-DD"));
+      setDate("2022-12-08");
       setPan(
         donorData?.pan_id
           ? donorData.pan_id.split("").slice(0, 10)
@@ -204,19 +205,29 @@ const DonorView = () => {
           <>
             <Paper elevation={3} sx={{ p: 3, textAlign: "start" }}>
               <div ref={printRef}>
-                {/* Reporting Person Information */}
-                <AdminInfo />
+                <Box
+                  sx={{
+                    border: "1px solid black", // Border styling
+                    borderRadius: "5px",
+                    padding: "15px",
+                    maxWidth: "100%", // Adjust width as needed
+                    margin: "auto", // Centering horizontally
+                    backgroundColor: "#fff",
+                  }}
+                >
+                  {/* Reporting Person Information */}
+                  <AdminInfo />
 
-                <Grid container spacing={1} sx={{ mt: 0.2, mb: 2 }}>
-                  <Grid item xs={12} sm={4}>
-                    <Typography>Date of approval/Notification:</Typography>
-                  </Grid>
-                  <Grid item xs={12} sm={8}>
-                    <Box sx={{ display: "flex", gap: 1 }}>
-                      <Typography sx={{ fontWeight: "bold" }}>
-                        {date}
-                      </Typography>
-                      {/* <TextField
+                  <Grid container spacing={1} sx={{ mt: 0.2, mb: 2 }}>
+                    <Grid item xs={12} sm={4}>
+                      <Typography>Date of approval/Notification:</Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={8}>
+                      <Box sx={{ display: "flex", gap: 1 }}>
+                        <Typography sx={{ fontWeight: "bold" }}>
+                          {date}
+                        </Typography>
+                        {/* <TextField
                         fullWidth
                         size="small"
                         type="date"
@@ -224,159 +235,159 @@ const DonorView = () => {
                         InputLabelProps={{ shrink: true }}
                         disabled={true}
                       /> */}
-                    </Box>
-                  </Grid>
-                </Grid>
-
-                <hr />
-
-                {/* Donor and Donations */}
-                <Typography
-                  variant="h6"
-                  sx={{ fontWeight: "bold", mt: 0.2, fontSize: "17px" }}
-                >
-                  Donor and Donations
-                </Typography>
-
-                <Grid container spacing={1} sx={{ mt: 0.2 }}>
-                  <Grid item xs={12} sm={4}>
-                    <Typography>Unique Identification Number:</Typography>
-                  </Grid>
-                  <Grid item xs={12} sm={8}>
-                    {/* PAN */}
-                    <Grid container spacing={1} alignItems="center">
-                      <Grid item xs={12} sm={2}>
-                        <Typography>PAN:</Typography>
-                      </Grid>
-                      <Grid item xs={12} sm={10}>
-                        <Box
-                          sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}
-                        >
-                          {pan.map((char, index) => (
-                            <TextField
-                              key={index}
-                              value={char}
-                              size="small"
-                              sx={{
-                                width: { xs: "8%", sm: "30px" },
-                                minWidth: "25px",
-                                textAlign: "center",
-                                "& .MuiInputBase-input": {
-                                  textAlign: "center",
-                                  p: 0,
-                                },
-                              }}
-                              inputProps={{ maxLength: 1 }}
-                              disabled={true}
-                            />
-                          ))}
-                        </Box>
-                      </Grid>
-                    </Grid>
-
-                    {/* Aadhar */}
-                    <Grid
-                      container
-                      spacing={1}
-                      alignItems="center"
-                      sx={{ mt: 0.2 }}
-                    >
-                      <Grid item xs={12} sm={2}>
-                        <Typography>Aadhar:</Typography>
-                      </Grid>
-                      <Grid item xs={12} sm={10}>
-                        <Box
-                          sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}
-                        >
-                          {aadhar.map((char, index) => (
-                            <TextField
-                              key={index}
-                              value={char}
-                              size="small"
-                              sx={{
-                                width: { xs: "7%", sm: "30px" },
-                                minWidth: "25px",
-                                textAlign: "center",
-                                "& .MuiInputBase-input": {
-                                  textAlign: "center",
-                                  p: 0,
-                                },
-                              }}
-                              inputProps={{ maxLength: 1 }}
-                              disabled={true}
-                            />
-                          ))}
-                        </Box>
-                      </Grid>
-                    </Grid>
-
-                    {/* Mobile */}
-                    <Grid
-                      container
-                      spacing={1}
-                      alignItems="center"
-                      sx={{ mt: 0.2 }}
-                    >
-                      <Grid item xs={12} sm={2}>
-                        <Typography>Mobile:</Typography>
-                      </Grid>
-                      <Grid item xs={12} sm={10}>
-                        <Box
-                          sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}
-                        >
-                          {mobile.map((char, index) => (
-                            <TextField
-                              key={index}
-                              value={char}
-                              size="small"
-                              sx={{
-                                width: { xs: "9%", sm: "30px" },
-                                minWidth: "25px",
-                                textAlign: "center",
-                                "& .MuiInputBase-input": {
-                                  textAlign: "center",
-                                  p: 0,
-                                },
-                              }}
-                              inputProps={{ maxLength: 1 }}
-                              disabled={true}
-                            />
-                          ))}
-                        </Box>
-                      </Grid>
+                      </Box>
                     </Grid>
                   </Grid>
-                </Grid>
 
-                <Grid container spacing={1} sx={{ mt: 0.2 }}>
-                  <Grid item xs={12} sm={4}>
-                    <Typography>Name of Donor:</Typography>
+                  <hr />
+
+                  {/* Donor and Donations */}
+                  <Typography
+                    variant="h6"
+                    sx={{ fontWeight: "bold", mt: 0.2, fontSize: "16px" }}
+                  >
+                    Donor and Donations
+                  </Typography>
+
+                  <Grid container spacing={1} sx={{ mt: 0.2 }}>
+                    <Grid item xs={12} sm={4}>
+                      <Typography>Unique Identification Number:</Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={8}>
+                      {/* PAN */}
+                      <Grid container spacing={1} alignItems="center">
+                        <Grid item xs={12} sm={2}>
+                          <Typography>PAN:</Typography>
+                        </Grid>
+                        <Grid item xs={12} sm={10}>
+                          <Box
+                            sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}
+                          >
+                            {pan.map((char, index) => (
+                              <TextField
+                                key={index}
+                                value={char}
+                                size="small"
+                                sx={{
+                                  width: { xs: "8%", sm: "30px" },
+                                  minWidth: "25px",
+                                  textAlign: "center",
+                                  "& .MuiInputBase-input": {
+                                    textAlign: "center",
+                                    p: 0,
+                                  },
+                                }}
+                                inputProps={{ maxLength: 1 }}
+                                disabled={true}
+                              />
+                            ))}
+                          </Box>
+                        </Grid>
+                      </Grid>
+
+                      {/* Aadhar */}
+                      <Grid
+                        container
+                        spacing={1}
+                        alignItems="center"
+                        sx={{ mt: 0.2 }}
+                      >
+                        <Grid item xs={12} sm={2}>
+                          <Typography>Aadhar:</Typography>
+                        </Grid>
+                        <Grid item xs={12} sm={10}>
+                          <Box
+                            sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}
+                          >
+                            {aadhar.map((char, index) => (
+                              <TextField
+                                key={index}
+                                value={char}
+                                size="small"
+                                sx={{
+                                  width: { xs: "7%", sm: "30px" },
+                                  minWidth: "25px",
+                                  textAlign: "center",
+                                  "& .MuiInputBase-input": {
+                                    textAlign: "center",
+                                    p: 0,
+                                  },
+                                }}
+                                inputProps={{ maxLength: 1 }}
+                                disabled={true}
+                              />
+                            ))}
+                          </Box>
+                        </Grid>
+                      </Grid>
+
+                      {/* Mobile */}
+                      <Grid
+                        container
+                        spacing={1}
+                        alignItems="center"
+                        sx={{ mt: 0.2 }}
+                      >
+                        <Grid item xs={12} sm={2}>
+                          <Typography>Mobile:</Typography>
+                        </Grid>
+                        <Grid item xs={12} sm={10}>
+                          <Box
+                            sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}
+                          >
+                            {mobile.map((char, index) => (
+                              <TextField
+                                key={index}
+                                value={char}
+                                size="small"
+                                sx={{
+                                  width: { xs: "9%", sm: "30px" },
+                                  minWidth: "25px",
+                                  textAlign: "center",
+                                  "& .MuiInputBase-input": {
+                                    textAlign: "center",
+                                    p: 0,
+                                  },
+                                }}
+                                inputProps={{ maxLength: 1 }}
+                                disabled={true}
+                              />
+                            ))}
+                          </Box>
+                        </Grid>
+                      </Grid>
+                    </Grid>
                   </Grid>
-                  <Grid item xs={12} sm={8}>
-                    <Box sx={{ display: "flex" }}>
-                      <Typography sx={{ fontWeight: "bold" }}>
-                        {donorName}
-                      </Typography>
-                      {/* <TextField
+
+                  <Grid container spacing={1} sx={{ mt: 0.2 }}>
+                    <Grid item xs={12} sm={4}>
+                      <Typography>Name of Donor:</Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={8}>
+                      <Box sx={{ display: "flex" }}>
+                        <Typography sx={{ fontWeight: "bold" }}>
+                          {donorName}
+                        </Typography>
+                        {/* <TextField
                         fullWidth
                         size="small"
                         value={donorName}
                         disabled={true}
                       /> */}
-                    </Box>
+                      </Box>
+                    </Grid>
                   </Grid>
-                </Grid>
 
-                <Grid container spacing={1} sx={{ mt: 0.2 }}>
-                  <Grid item xs={12} sm={4}>
-                    <Typography>Address of Donor:</Typography>
-                  </Grid>
-                  <Grid item xs={12} sm={8}>
-                    <Box sx={{ display: "flex" }}>
-                      <Typography sx={{ fontWeight: "bold" }}>
-                        {donorAddress}
-                      </Typography>
-                      {/* <TextField
+                  <Grid container spacing={1} sx={{ mt: 0.2 }}>
+                    <Grid item xs={12} sm={4}>
+                      <Typography>Address of Donor:</Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={8}>
+                      <Box sx={{ display: "flex" }}>
+                        <Typography sx={{ fontWeight: "bold" }}>
+                          {donorAddress}
+                        </Typography>
+                        {/* <TextField
                         fullWidth
                         size="small"
                         multiline
@@ -384,149 +395,153 @@ const DonorView = () => {
                         value={donorAddress}
                         disabled={true}
                       /> */}
-                    </Box>
+                      </Box>
+                    </Grid>
                   </Grid>
-                </Grid>
 
-                <Grid container spacing={1} sx={{ mt: 0.2 }}>
-                  <Grid item xs={12} sm={4}>
-                    <Typography>Amount of Donation Received:</Typography>
-                  </Grid>
-                  <Grid item xs={12} sm={8}>
-                    <Typography sx={{ fontWeight: "bold" }}>
-                      {amountReceived}
-                    </Typography>
-                    {/* <TextField
+                  <Grid container spacing={1} sx={{ mt: 0.2 }}>
+                    <Grid item xs={12} sm={4}>
+                      <Typography>Amount of Donation Received:</Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={8}>
+                      <Typography sx={{ fontWeight: "bold" }}>
+                        {amountReceived}
+                      </Typography>
+                      {/* <TextField
                       fullWidth
                       size="small"
                       value={amountReceived}
                       disabled={true}
                     /> */}
+                    </Grid>
                   </Grid>
-                </Grid>
 
-                <Grid container spacing={1} sx={{ mt: 0.2 }}>
-                  <Grid item xs={12} sm={4}>
-                    <Typography>Financial Year:</Typography>
-                  </Grid>
-                  <Grid item xs={12} sm={8}>
-                    <Typography sx={{ fontWeight: "bold" }}>
-                      {financialYear}
-                    </Typography>
-                    {/* <TextField
+                  <Grid container spacing={1} sx={{ mt: 0.2 }}>
+                    <Grid item xs={12} sm={4}>
+                      <Typography>Financial Year:</Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={8}>
+                      <Typography sx={{ fontWeight: "bold" }}>
+                        {financialYear}
+                      </Typography>
+                      {/* <TextField
                       fullWidth
                       size="small"
                       value={financialYear}
                       disabled={true}
                     /> */}
+                    </Grid>
                   </Grid>
-                </Grid>
 
-                <Grid container spacing={1} sx={{ mt: 0.2 }}>
-                  <Grid item xs={12} sm={4}>
-                    <Typography>Type of Donation:</Typography>
+                  <Grid container spacing={1} sx={{ mt: 0.2 }}>
+                    <Grid item xs={12} sm={4}>
+                      <Typography>Type of Donation:</Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={8}>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={typeDonation.corpus}
+                            disabled={true}
+                          />
+                        }
+                        label="Corpus"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={typeDonation.specificGrants}
+                            disabled={true}
+                          />
+                        }
+                        label="Specific Grants"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={typeDonation.others}
+                            disabled={true}
+                          />
+                        }
+                        label="Others"
+                      />
+                    </Grid>
                   </Grid>
-                  <Grid item xs={12} sm={8}>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={typeDonation.corpus}
-                          disabled={true}
-                        />
-                      }
-                      label="Corpus"
-                    />
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={typeDonation.specificGrants}
-                          disabled={true}
-                        />
-                      }
-                      label="Specific Grants"
-                    />
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={typeDonation.others}
-                          disabled={true}
-                        />
-                      }
-                      label="Others"
-                    />
-                  </Grid>
-                </Grid>
 
-                <Grid container spacing={1} sx={{ mt: 0.2 }}>
-                  <Grid item xs={12} sm={4}>
-                    <Typography>Section Eligible for Deduction:</Typography>
+                  <Grid container spacing={1} sx={{ mt: 0.2 }}>
+                    <Grid item xs={12} sm={4}>
+                      <Typography>Section Eligible for Deduction:</Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={8}>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={deductionSection.section80G}
+                            disabled={true}
+                          />
+                        }
+                        label="Section 80G(5)(vi)"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={deductionSection.section35_1_ii}
+                            disabled={true}
+                          />
+                        }
+                        label="Section 35(1)(ii)"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={deductionSection.section35_1_iia}
+                            disabled={true}
+                          />
+                        }
+                        label="Section 35(1)(iia)"
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={deductionSection.section35_1_iii}
+                            disabled={true}
+                          />
+                        }
+                        label="Section 35(1)(iii)"
+                      />
+                    </Grid>
                   </Grid>
-                  <Grid item xs={12} sm={8}>
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={deductionSection.section80G}
-                          disabled={true}
-                        />
-                      }
-                      label="Section 80G(5)(vi)"
-                    />
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={deductionSection.section35_1_ii}
-                          disabled={true}
-                        />
-                      }
-                      label="Section 35(1)(ii)"
-                    />
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={deductionSection.section35_1_iia}
-                          disabled={true}
-                        />
-                      }
-                      label="Section 35(1)(iia)"
-                    />
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          checked={deductionSection.section35_1_iii}
-                          disabled={true}
-                        />
-                      }
-                      label="Section 35(1)(iii)"
-                    />
-                  </Grid>
-                </Grid>
 
-                <Grid container spacing={1} sx={{ mt: 0.2 }}>
-                  <Grid item xs={12}>
-                    <Typography>
-                      I, <strong>SHOAIB MOHAMMED</strong> son of{" "}
-                      <strong>TAJODDIN</strong> solemnly declare that to the
-                      best of my knowledge and belief, the information given in
-                      the certificate is correct and complete and is in
-                      accordance with the provisions of the Income-tax Act,
-                      1961. I further declare that I am making this certificate
-                      in my capacity as <strong>TREASURER</strong> and I am also
-                      competent to issue this certificate. I am holding
-                      permanent account number <strong>ALNPG9298E</strong>.
-                    </Typography>
+                  <Grid container spacing={1} sx={{ mt: 0.2 }}>
+                    <Grid item xs={12}>
+                      <Typography sx={{ fontSize: "14px" }}>
+                        I, <strong>SHOAIB MOHAMMED</strong> son of{" "}
+                        <strong>TAJODDIN</strong> solemnly declare that to the
+                        best of my knowledge and belief, the information given
+                        in the certificate is correct and complete and is in
+                        accordance with the provisions of the Income-tax Act,
+                        1961. I further declare that I am making this
+                        certificate in my capacity as <strong>TREASURER</strong>{" "}
+                        and I am also competent to issue this certificate. I am
+                        holding permanent account number{" "}
+                        <strong>ALNPG9298E</strong>.
+                      </Typography>
+                    </Grid>
                   </Grid>
-                </Grid>
-
+                </Box>
+                
                 <Grid
                   container
                   spacing={1}
-                  sx={{ mt: 2, justifyContent: "space-between" }}
+                  sx={{ mt: 3, justifyContent: "space-between" }}
                 >
                   <Grid item>
-                    <Typography>Date: </Typography>
+                    <Typography sx={{ fontSize: "14px" }}>Date: </Typography>
                   </Grid>
                   <Grid item>
-                    <Typography>Signature:</Typography>
+                    <Typography sx={{ fontSize: "14px" }}>
+                      Signature:
+                    </Typography>
                   </Grid>
                 </Grid>
               </div>

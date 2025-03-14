@@ -74,7 +74,8 @@ const DonorForm = () => {
   );
 
   const [formLoading, setFormLoading] = useState(false);
-  const [date, setDate] = useState(moment().format("YYYY-MM-DD"));
+  // const [date, setDate] = useState(moment().format("YYYY-MM-DD"));
+  const [date, setDate] = useState("2022-12-08");
   const [pan, setPan] = useState(Array(10).fill(""));
   const [aadhar, setAadhar] = useState(Array(12).fill(""));
   const [mobile, setMobile] = useState(Array(10).fill(""));
@@ -284,7 +285,7 @@ const DonorForm = () => {
       // handlePrint();
 
       // Reset fields
-      setDate(moment().format("YYYY-MM-DD"));
+      setDate("2022-12-08");
       setPan(Array(10).fill(""));
       setAadhar(Array(12).fill(""));
       setMobile(Array(10).fill(""));
@@ -325,16 +326,27 @@ const DonorForm = () => {
       <Container sx={{ flexGrow: 1 }}>
         <Paper elevation={3} sx={{ p: 3, textAlign: "start" }}>
           <div ref={printRef}>
-            {/* Reporting Person Information */}
-            <AdminInfo />
+            <Box
+              sx={{
+                border: "1px solid black", // Border styling
+                borderRadius: "5px",
+                padding: "15px",
+                maxWidth: "100%", // Adjust width as needed
+                margin: "auto", // Centering horizontally
+                backgroundColor: "#fff",
+              }}
+            >
+              {/* Reporting Person Information */}
+              <AdminInfo />
 
-            <Grid container spacing={1} sx={{ mt: 1, mb: 2 }}>
-              <Grid item xs={12} sm={4}>
-                <Typography>Date of approval/Notification:</Typography>
-              </Grid>
-              <Grid item xs={12} sm={8}>
-                <Box sx={{ display: "flex", gap: 1 }}>
-                  <TextField
+              <Grid container spacing={1} sx={{ mt: 1, mb: 2 }}>
+                <Grid item xs={12} sm={4}>
+                  <Typography>Date of approval/Notification:</Typography>
+                </Grid>
+                <Grid item xs={12} sm={8}>
+                  <Box sx={{ display: "flex", gap: 1 }}>
+                    <Typography sx={{ fontWeight: "bold" }}>{date}</Typography>
+                    {/* <TextField
                     fullWidth
                     size="small"
                     type="date"
@@ -342,377 +354,388 @@ const DonorForm = () => {
                     onChange={handleDateChange}
                     onFocus={(e) => e.target.showPicker()}
                     InputLabelProps={{ shrink: true }}
-                  />
-                </Box>
-              </Grid>
-            </Grid>
-
-            <hr />
-
-            {/* Donor and Donations */}
-            <Typography
-              variant="h6"
-              sx={{ fontWeight: "bold", mt: 1, fontSize: "17px" }}
-            >
-              Donor and Donations
-            </Typography>
-
-            <Grid container spacing={1} sx={{ mt: 1 }}>
-              <Grid item xs={12} sm={4}>
-                <Typography>Unique Identification Number:</Typography>
-              </Grid>
-              <Grid item xs={12} sm={8}>
-                {/* PAN */}
-                <Grid container spacing={1} alignItems="center">
-                  <Grid item xs={12} sm={2}>
-                    <Typography>PAN:</Typography>
-                  </Grid>
-                  <Grid item xs={12} sm={10}>
-                    <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}>
-                      {pan.map((char, index) => (
-                        <TextField
-                          key={index}
-                          inputRef={(el) => (panRefs.current[index] = el)}
-                          value={char}
-                          onChange={handleBoxChange(
-                            index,
-                            setPan,
-                            10,
-                            panRefs,
-                            setPanErrors,
-                            "alphanumeric"
-                          )}
-                          onKeyDown={handleKeyDown(index, setPan, panRefs)}
-                          size="small"
-                          sx={{
-                            width: { xs: "8%", sm: "30px" },
-                            minWidth: "25px",
-                            textAlign: "center",
-                            "& .MuiInputBase-input": {
-                              textAlign: "center",
-                              p: 0,
-                            },
-                          }}
-                          inputProps={{ maxLength: 1 }}
-                        />
-                      ))}
-                    </Box>
-                  </Grid>
-                </Grid>
-
-                {/* Aadhar */}
-                <Grid container spacing={1} alignItems="center" sx={{ mt: 1 }}>
-                  <Grid item xs={12} sm={2}>
-                    <Typography>Aadhar:</Typography>
-                  </Grid>
-                  <Grid item xs={12} sm={10}>
-                    <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}>
-                      {aadhar.map((char, index) => (
-                        <TextField
-                          key={index}
-                          inputRef={(el) => (aadharRefs.current[index] = el)}
-                          value={char}
-                          onChange={handleBoxChange(
-                            index,
-                            setAadhar,
-                            12,
-                            aadharRefs,
-                            setAadharErrors,
-                            "numeric"
-                          )}
-                          onKeyDown={handleKeyDown(
-                            index,
-                            setAadhar,
-                            aadharRefs
-                          )}
-                          size="small"
-                          sx={{
-                            width: { xs: "7%", sm: "30px" },
-                            minWidth: "25px",
-                            textAlign: "center",
-                            "& .MuiInputBase-input": {
-                              textAlign: "center",
-                              p: 0,
-                            },
-                          }}
-                          inputProps={{
-                            maxLength: 1,
-                            inputMode: "numeric", // Ensures numeric keyboard stays
-                            pattern: "[0-9]*", // Enforces numeric input
-                          }}
-                          error={!!aadharErrors[index]}
-                          helperText={aadharErrors[index]}
-                        />
-                      ))}
-                    </Box>
-                  </Grid>
-                </Grid>
-
-                {/* Mobile */}
-                <Grid container spacing={1} alignItems="center" sx={{ mt: 1 }}>
-                  <Grid item xs={12} sm={2}>
-                    <Typography>Mobile:</Typography>
-                  </Grid>
-                  <Grid item xs={12} sm={10}>
-                    <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}>
-                      {mobile.map((char, index) => (
-                        <TextField
-                          key={index}
-                          inputRef={(el) => (mobileRefs.current[index] = el)}
-                          value={char}
-                          onChange={handleBoxChange(
-                            index,
-                            setMobile,
-                            10,
-                            mobileRefs,
-                            setMobileErrors,
-                            "numeric"
-                          )}
-                          onKeyDown={handleKeyDown(
-                            index,
-                            setMobile,
-                            mobileRefs
-                          )}
-                          size="small"
-                          sx={{
-                            width: { xs: "9%", sm: "30px" },
-                            minWidth: "25px",
-                            textAlign: "center",
-                            "& .MuiInputBase-input": {
-                              textAlign: "center",
-                              p: 0,
-                            },
-                          }}
-                          inputProps={{
-                            maxLength: 1,
-                            inputMode: "numeric", // Ensures numeric keyboard stays
-                            pattern: "[0-9]*", // Enforces numeric input
-                          }}
-                          error={!!mobileErrors[index]}
-                          helperText={mobileErrors[index]}
-                        />
-                      ))}
-                    </Box>
-                  </Grid>
+                  /> */}
+                  </Box>
                 </Grid>
               </Grid>
-            </Grid>
 
-            <Grid container spacing={1} sx={{ mt: 1 }}>
-              <Grid item xs={12} sm={4}>
-                <Typography>Name of Donor:</Typography>
+              <hr />
+
+              {/* Donor and Donations */}
+              <Typography
+                variant="h6"
+                sx={{ fontWeight: "bold", mt: 1, fontSize: "17px" }}
+              >
+                Donor and Donations
+              </Typography>
+
+              <Grid container spacing={1} sx={{ mt: 1 }}>
+                <Grid item xs={12} sm={4}>
+                  <Typography>Unique Identification Number:</Typography>
+                </Grid>
+                <Grid item xs={12} sm={8}>
+                  {/* PAN */}
+                  <Grid container spacing={1} alignItems="center">
+                    <Grid item xs={12} sm={2}>
+                      <Typography>PAN:</Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={10}>
+                      <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}>
+                        {pan.map((char, index) => (
+                          <TextField
+                            key={index}
+                            inputRef={(el) => (panRefs.current[index] = el)}
+                            value={char}
+                            onChange={handleBoxChange(
+                              index,
+                              setPan,
+                              10,
+                              panRefs,
+                              setPanErrors,
+                              "alphanumeric"
+                            )}
+                            onKeyDown={handleKeyDown(index, setPan, panRefs)}
+                            size="small"
+                            sx={{
+                              width: { xs: "8%", sm: "30px" },
+                              minWidth: "25px",
+                              textAlign: "center",
+                              "& .MuiInputBase-input": {
+                                textAlign: "center",
+                                p: 0,
+                              },
+                            }}
+                            inputProps={{ maxLength: 1 }}
+                          />
+                        ))}
+                      </Box>
+                    </Grid>
+                  </Grid>
+
+                  {/* Aadhar */}
+                  <Grid
+                    container
+                    spacing={1}
+                    alignItems="center"
+                    sx={{ mt: 1 }}
+                  >
+                    <Grid item xs={12} sm={2}>
+                      <Typography>Aadhar:</Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={10}>
+                      <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}>
+                        {aadhar.map((char, index) => (
+                          <TextField
+                            key={index}
+                            inputRef={(el) => (aadharRefs.current[index] = el)}
+                            value={char}
+                            onChange={handleBoxChange(
+                              index,
+                              setAadhar,
+                              12,
+                              aadharRefs,
+                              setAadharErrors,
+                              "numeric"
+                            )}
+                            onKeyDown={handleKeyDown(
+                              index,
+                              setAadhar,
+                              aadharRefs
+                            )}
+                            size="small"
+                            sx={{
+                              width: { xs: "7%", sm: "30px" },
+                              minWidth: "25px",
+                              textAlign: "center",
+                              "& .MuiInputBase-input": {
+                                textAlign: "center",
+                                p: 0,
+                              },
+                            }}
+                            inputProps={{
+                              maxLength: 1,
+                              inputMode: "numeric", // Ensures numeric keyboard stays
+                              pattern: "[0-9]*", // Enforces numeric input
+                            }}
+                            error={!!aadharErrors[index]}
+                            helperText={aadharErrors[index]}
+                          />
+                        ))}
+                      </Box>
+                    </Grid>
+                  </Grid>
+
+                  {/* Mobile */}
+                  <Grid
+                    container
+                    spacing={1}
+                    alignItems="center"
+                    sx={{ mt: 1 }}
+                  >
+                    <Grid item xs={12} sm={2}>
+                      <Typography>Mobile:</Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={10}>
+                      <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}>
+                        {mobile.map((char, index) => (
+                          <TextField
+                            key={index}
+                            inputRef={(el) => (mobileRefs.current[index] = el)}
+                            value={char}
+                            onChange={handleBoxChange(
+                              index,
+                              setMobile,
+                              10,
+                              mobileRefs,
+                              setMobileErrors,
+                              "numeric"
+                            )}
+                            onKeyDown={handleKeyDown(
+                              index,
+                              setMobile,
+                              mobileRefs
+                            )}
+                            size="small"
+                            sx={{
+                              width: { xs: "9%", sm: "30px" },
+                              minWidth: "25px",
+                              textAlign: "center",
+                              "& .MuiInputBase-input": {
+                                textAlign: "center",
+                                p: 0,
+                              },
+                            }}
+                            inputProps={{
+                              maxLength: 1,
+                              inputMode: "numeric", // Ensures numeric keyboard stays
+                              pattern: "[0-9]*", // Enforces numeric input
+                            }}
+                            error={!!mobileErrors[index]}
+                            helperText={mobileErrors[index]}
+                          />
+                        ))}
+                      </Box>
+                    </Grid>
+                  </Grid>
+                </Grid>
               </Grid>
-              <Grid item xs={12} sm={8}>
-                <Box sx={{ display: "flex", gap: 1 }}>
+
+              <Grid container spacing={1} sx={{ mt: 1 }}>
+                <Grid item xs={12} sm={4}>
+                  <Typography>Name of Donor:</Typography>
+                </Grid>
+                <Grid item xs={12} sm={8}>
+                  <Box sx={{ display: "flex", gap: 1 }}>
+                    <TextField
+                      fullWidth
+                      size="small"
+                      value={donorName}
+                      onChange={(e) => setDonorName(e.target.value)}
+                    />
+                  </Box>
+                </Grid>
+              </Grid>
+
+              <Grid container spacing={1} sx={{ mt: 1 }}>
+                <Grid item xs={12} sm={4}>
+                  <Typography>Address of Donor:</Typography>
+                </Grid>
+                <Grid item xs={12} sm={8}>
+                  <Box sx={{ display: "flex", gap: 1 }}>
+                    <TextField
+                      fullWidth
+                      size="small"
+                      multiline
+                      rows={5}
+                      value={donorAddress}
+                      onChange={(e) => setDonorAddress(e.target.value)}
+                    />
+                  </Box>
+                </Grid>
+              </Grid>
+
+              <Grid container spacing={1} sx={{ mt: 1 }}>
+                <Grid item xs={12} sm={4}>
+                  <Typography>Amount of Donation Received:</Typography>
+                </Grid>
+                <Grid item xs={12} sm={8}>
                   <TextField
                     fullWidth
                     size="small"
-                    value={donorName}
-                    onChange={(e) => setDonorName(e.target.value)}
+                    value={amountReceived}
+                    onChange={(e) => setAmountReceived(e.target.value)}
                   />
-                </Box>
+                </Grid>
               </Grid>
-            </Grid>
 
-            <Grid container spacing={1} sx={{ mt: 1 }}>
-              <Grid item xs={12} sm={4}>
-                <Typography>Address of Donor:</Typography>
-              </Grid>
-              <Grid item xs={12} sm={8}>
-                <Box sx={{ display: "flex", gap: 1 }}>
-                  <TextField
-                    fullWidth
-                    size="small"
-                    multiline
-                    rows={5}
-                    value={donorAddress}
-                    onChange={(e) => setDonorAddress(e.target.value)}
-                  />
-                </Box>
-              </Grid>
-            </Grid>
-
-            <Grid container spacing={1} sx={{ mt: 1 }}>
-              <Grid item xs={12} sm={4}>
-                <Typography>Amount of Donation Received:</Typography>
-              </Grid>
-              <Grid item xs={12} sm={8}>
-                <TextField
-                  fullWidth
-                  size="small"
-                  value={amountReceived}
-                  onChange={(e) => setAmountReceived(e.target.value)}
-                />
-              </Grid>
-            </Grid>
-
-            <Grid container spacing={1} sx={{ mt: 1 }}>
-              <Grid item xs={12} sm={4}>
-                <Typography>Financial Year:</Typography>
-              </Grid>
-              <Grid item xs={12} sm={8}>
-                {/* <TextField
+              <Grid container spacing={1} sx={{ mt: 1 }}>
+                <Grid item xs={12} sm={4}>
+                  <Typography>Financial Year:</Typography>
+                </Grid>
+                <Grid item xs={12} sm={8}>
+                  {/* <TextField
                   fullWidth
                   size="small"
                   value={financialYear}
                   onChange={(e) => setFinancialYear(e.target.value)}
                 /> */}
-                <TextField
-                  select
-                  fullWidth
-                  size="small"
-                  value={financialYear}
-                  onChange={(e) => setFinancialYear(e.target.value)}
-                >
-                  {financialYears.map((year) => (
-                    <MenuItem key={year} value={year}>
-                      {year}
-                    </MenuItem>
-                  ))}
-                </TextField>
+                  <TextField
+                    select
+                    fullWidth
+                    size="small"
+                    value={financialYear}
+                    onChange={(e) => setFinancialYear(e.target.value)}
+                  >
+                    {financialYears.map((year) => (
+                      <MenuItem key={year} value={year}>
+                        {year}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </Grid>
               </Grid>
-            </Grid>
 
-            <Grid container spacing={1} sx={{ mt: 1 }}>
-              <Grid item xs={12} sm={4}>
-                <Typography>Type of Donation:</Typography>
+              <Grid container spacing={1} sx={{ mt: 1 }}>
+                <Grid item xs={12} sm={4}>
+                  <Typography>Type of Donation:</Typography>
+                </Grid>
+                <Grid item xs={12} sm={8}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={typeDonation.corpus}
+                        onChange={(e) =>
+                          setTypeDonation({
+                            ...typeDonation,
+                            corpus: e.target.checked,
+                          })
+                        }
+                      />
+                    }
+                    label="Corpus"
+                  />
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={typeDonation.specificGrants}
+                        onChange={(e) =>
+                          setTypeDonation({
+                            ...typeDonation,
+                            specificGrants: e.target.checked,
+                          })
+                        }
+                      />
+                    }
+                    label="Specific Grants"
+                  />
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={typeDonation.others}
+                        onChange={(e) =>
+                          setTypeDonation({
+                            ...typeDonation,
+                            others: e.target.checked,
+                          })
+                        }
+                      />
+                    }
+                    label="Others"
+                  />
+                </Grid>
               </Grid>
-              <Grid item xs={12} sm={8}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={typeDonation.corpus}
-                      onChange={(e) =>
-                        setTypeDonation({
-                          ...typeDonation,
-                          corpus: e.target.checked,
-                        })
-                      }
-                    />
-                  }
-                  label="Corpus"
-                />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={typeDonation.specificGrants}
-                      onChange={(e) =>
-                        setTypeDonation({
-                          ...typeDonation,
-                          specificGrants: e.target.checked,
-                        })
-                      }
-                    />
-                  }
-                  label="Specific Grants"
-                />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={typeDonation.others}
-                      onChange={(e) =>
-                        setTypeDonation({
-                          ...typeDonation,
-                          others: e.target.checked,
-                        })
-                      }
-                    />
-                  }
-                  label="Others"
-                />
-              </Grid>
-            </Grid>
 
-            <Grid container spacing={1} sx={{ mt: 1 }}>
-              <Grid item xs={12} sm={4}>
-                <Typography>Section Eligible for Deduction:</Typography>
+              <Grid container spacing={1} sx={{ mt: 1 }}>
+                <Grid item xs={12} sm={4}>
+                  <Typography>Section Eligible for Deduction:</Typography>
+                </Grid>
+                <Grid item xs={12} sm={8}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={deductionSection.section80G}
+                        onChange={(e) =>
+                          setDeductionSection({
+                            ...deductionSection,
+                            section80G: e.target.checked,
+                          })
+                        }
+                      />
+                    }
+                    label="Section 80G(5)(vi)"
+                  />
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={deductionSection.section35_1_ii}
+                        onChange={(e) =>
+                          setDeductionSection({
+                            ...deductionSection,
+                            section35_1_ii: e.target.checked,
+                          })
+                        }
+                      />
+                    }
+                    label="Section 35(1)(ii)"
+                  />
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={deductionSection.section35_1_iia}
+                        onChange={(e) =>
+                          setDeductionSection({
+                            ...deductionSection,
+                            section35_1_iia: e.target.checked,
+                          })
+                        }
+                      />
+                    }
+                    label="Section 35(1)(iia)"
+                  />
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={deductionSection.section35_1_iii}
+                        onChange={(e) =>
+                          setDeductionSection({
+                            ...deductionSection,
+                            section35_1_iii: e.target.checked,
+                          })
+                        }
+                      />
+                    }
+                    label="Section 35(1)(iii)"
+                  />
+                </Grid>
               </Grid>
-              <Grid item xs={12} sm={8}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={deductionSection.section80G}
-                      onChange={(e) =>
-                        setDeductionSection({
-                          ...deductionSection,
-                          section80G: e.target.checked,
-                        })
-                      }
-                    />
-                  }
-                  label="Section 80G(5)(vi)"
-                />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={deductionSection.section35_1_ii}
-                      onChange={(e) =>
-                        setDeductionSection({
-                          ...deductionSection,
-                          section35_1_ii: e.target.checked,
-                        })
-                      }
-                    />
-                  }
-                  label="Section 35(1)(ii)"
-                />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={deductionSection.section35_1_iia}
-                      onChange={(e) =>
-                        setDeductionSection({
-                          ...deductionSection,
-                          section35_1_iia: e.target.checked,
-                        })
-                      }
-                    />
-                  }
-                  label="Section 35(1)(iia)"
-                />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={deductionSection.section35_1_iii}
-                      onChange={(e) =>
-                        setDeductionSection({
-                          ...deductionSection,
-                          section35_1_iii: e.target.checked,
-                        })
-                      }
-                    />
-                  }
-                  label="Section 35(1)(iii)"
-                />
-              </Grid>
-            </Grid>
 
-            <Grid container spacing={1} sx={{ mt: 1 }}>
-              <Grid item xs={12}>
-                <Typography>
-                  I, <strong>SHOAIB MOHAMMED</strong> son of{" "}
-                  <strong>TAJODDIN</strong> solemnly declare that to the best of
-                  my knowledge and belief, the information given in the
-                  certificate is correct and complete and is in accordance with
-                  the provisions of the Income-tax Act, 1961. I further declare
-                  that I am making this certificate in my capacity as{" "}
-                  <strong>TREASURER</strong> and I am also competent to issue
-                  this certificate. I am holding permanent account number{" "}
-                  <strong>ALNPG9298E</strong>.
-                </Typography>
+              <Grid container spacing={1} sx={{ mt: 1 }}>
+                <Grid item xs={12}>
+                  <Typography sx={{ fontSize: "14px" }}>
+                    I, <strong>SHOAIB MOHAMMED</strong> son of{" "}
+                    <strong>TAJODDIN</strong> solemnly declare that to the best
+                    of my knowledge and belief, the information given in the
+                    certificate is correct and complete and is in accordance
+                    with the provisions of the Income-tax Act, 1961. I further
+                    declare that I am making this certificate in my capacity as{" "}
+                    <strong>TREASURER</strong> and I am also competent to issue
+                    this certificate. I am holding permanent account number{" "}
+                    <strong>ALNPG9298E</strong>.
+                  </Typography>
+                </Grid>
               </Grid>
-            </Grid>
+            </Box>
 
             <Grid
               container
               spacing={1}
-              sx={{ mt: 2, justifyContent: "space-between" }}
+              sx={{ mt: 3, justifyContent: "space-between" }}
             >
               <Grid item>
-                <Typography>Date: </Typography>
+                <Typography sx={{ fontSize: "14px" }}>Date: </Typography>
               </Grid>
               <Grid item>
-                <Typography>Signature:</Typography>
+                <Typography sx={{ fontSize: "14px" }}>Signature:</Typography>
               </Grid>
             </Grid>
           </div>
