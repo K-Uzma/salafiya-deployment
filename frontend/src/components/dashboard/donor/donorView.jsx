@@ -65,7 +65,7 @@ const DonorView = () => {
           setPrintBtnPress(false);
           document.body.removeChild(iframe);
         }, 1000);
-      }, 0); // Ensures the UI updates before executing printing logic
+      }, 0);
     }
   }, [printBtnPress]);
 
@@ -190,7 +190,7 @@ const DonorView = () => {
   ) : (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      {!printBtnPress && <Sidebar />}
+      {!printBtnPress && <Sidebar className="sidebar" />}
       <Container sx={{ flexGrow: 1 }}>
         {Object.keys(donorData).length === 0 ? (
           <Box
@@ -216,6 +216,7 @@ const DonorView = () => {
             <Paper elevation={3} sx={{ p: 3, textAlign: "start" }}>
               <div ref={printRef}>
                 <Box
+                  className="print-content"
                   sx={{
                     border: "1px solid black", // Border styling
                     borderRadius: "5px",
