@@ -171,7 +171,14 @@ const DonorPrint = () => {
 
   useEffect(() => {
     if (Object.keys(donorData).length !== 0) {
-      handlePrintPage();
+      // handlePrintPage();
+      window.print();
+
+      // Listen for print cancel or complete
+      window.addEventListener("afterprint", handleAfterPrint);
+      return () => {
+        window.removeEventListener("afterprint", handleAfterPrint);
+      };
     }
   }, [donorName, donorAddress, amountReceived, financialYear]);
 
@@ -214,7 +221,7 @@ const DonorPrint = () => {
         ) : (
           <>
             <Paper elevation={3} sx={{ p: 3, textAlign: "start" }}>
-              <div ref={printRef}>
+              <div ref={printRef} id="print-content">
                 <Box
                   sx={{
                     border: "1px solid black", // Border styling
@@ -556,6 +563,25 @@ const DonorPrint = () => {
                 </Grid>
               </div>
             </Paper>
+            <style>
+              {`
+                @media print {
+                  body * {
+                    visibility: hidden;
+                  }
+                  #print-content, #print-content * {
+                    visibility: visible;
+                  }
+                  #print-content {
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    width: 100%;
+                    height: 100%;
+                  }
+                }
+              `}
+            </style>
           </>
         )}
       </Container>
