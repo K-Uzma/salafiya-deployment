@@ -17,6 +17,7 @@ import moment from "moment";
 import { DonorDetailByID } from "../../../api/modules/donorModule";
 import { useLocation } from "react-router-dom";
 import AdminInfo from "./adminInfo";
+import "./donorView.css";
 
 const DonorView = () => {
   const [printBtnPress, setPrintBtnPress] = useState(false);
