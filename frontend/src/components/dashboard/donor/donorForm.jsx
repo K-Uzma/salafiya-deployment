@@ -709,7 +709,7 @@ const DonorForm = () => {
                 </Grid>
               </Grid>
 
-              <Grid container spacing={1} sx={{ mt: 1 }}>
+              <Grid container spacing={0.3} sx={{ mt: 0.3 }}>
                 <Grid item xs={12}>
                   <Typography sx={{ fontSize: "14px" }}>
                     I, <strong>SHOAIB MOHAMMED</strong> son of{" "}
@@ -729,7 +729,7 @@ const DonorForm = () => {
             <Grid
               container
               spacing={1}
-              sx={{ mt: 3, justifyContent: "space-between" }}
+              sx={{ mt: 2, justifyContent: "space-between" }}
             >
               <Grid item>
                 <Typography sx={{ fontSize: "14px" }}>Date: </Typography>

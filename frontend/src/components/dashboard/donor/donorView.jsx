@@ -433,7 +433,7 @@ const DonorView = () => {
                     </Grid>
                   </Grid>
 
-                  <Grid container spacing={1} sx={{ mt: 0.2 }}>
+                  <Grid container spacing={0.3} sx={{ mt: 0.2 }}>
                     <Grid item xs={12} sm={4}>
                       <Typography>Type of Donation:</Typography>
                     </Grid>
@@ -468,7 +468,7 @@ const DonorView = () => {
                     </Grid>
                   </Grid>
 
-                  <Grid container spacing={1} sx={{ mt: 0.2 }}>
+                  <Grid container spacing={0}>
                     <Grid item xs={12} sm={4}>
                       <Typography>Section Eligible for Deduction:</Typography>
                     </Grid>
@@ -512,7 +512,7 @@ const DonorView = () => {
                     </Grid>
                   </Grid>
 
-                  <Grid container spacing={1} sx={{ mt: 0.2 }}>
+                  <Grid container spacing={0.3} sx={{ mt: 0.3 }}>
                     <Grid item xs={12}>
                       <Typography sx={{ fontSize: "14px" }}>
                         I, <strong>SHOAIB MOHAMMED</strong> son of{" "}
@@ -529,11 +529,11 @@ const DonorView = () => {
                     </Grid>
                   </Grid>
                 </Box>
-                
+
                 <Grid
                   container
                   spacing={1}
-                  sx={{ mt: 3, justifyContent: "space-between" }}
+                  sx={{ mt: 2, justifyContent: "space-between" }}
                 >
                   <Grid item>
                     <Typography sx={{ fontSize: "14px" }}>Date: </Typography>
