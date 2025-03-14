@@ -13,6 +13,9 @@ const api = {
 
   //donorDetailByID
   donorDetailByID: "admin/donor-detail-by-id/",
+
+  //deleteDonorByID
+  deleteDonorByID: "admin/delete-donor-by-id/",
 };
 
 export default api;

@@ -1,6 +1,18 @@
 const mysql = require("mysql2/promise");
 
 //for local
+// const pool = mysql.createPool({
+//   host: "localhost",
+//   user: "root",
+//   password: "",
+//   database: "salafiya_campus",
+//   waitForConnections: true,
+//   connectionLimit: 10,
+//   queueLimit: 0,
+//   timezone: "utc",
+// });
+
+//for live
 const pool = mysql.createPool({
   host: "byhrkgo8wmzugrxr4xvi-mysql.services.clever-cloud.com",
   user: "usnukubpjknulnzr",

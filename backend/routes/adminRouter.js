@@ -142,4 +142,26 @@ router.get(
   }
 );
 
+//deleteDonorByID
+router.delete(
+  "/api/admin/delete-donor-by-id/:id",
+  authMiddleware,
+  async (req, res) => {
+    try {
+      const id = req.params.id;
+
+      const del1 = `scaid_id = '${id}'`;
+      await pool.execute("CALL DeleteAdminDonors(?)", [del1]);
+
+      return res.status(200).json({
+        message: "Donor Deleted Successfully!",
+      });
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ error: "Internal Server Error", details: error.message });
+    }
+  }
+);
+
 module.exports = router;

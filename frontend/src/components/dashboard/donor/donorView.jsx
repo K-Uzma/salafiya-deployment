@@ -196,20 +196,23 @@ const DonorView = () => {
                 {/* Reporting Person Information */}
                 <AdminInfo />
 
-                <Grid container spacing={2} sx={{ mt: 1, mb: 3 }}>
+                <Grid container spacing={1} sx={{ mt: 0.2, mb: 2 }}>
                   <Grid item xs={12} sm={4}>
                     <Typography>Date of approval/Notification:</Typography>
                   </Grid>
                   <Grid item xs={12} sm={8}>
                     <Box sx={{ display: "flex", gap: 1 }}>
-                      <TextField
+                      <Typography sx={{ fontWeight: "bold" }}>
+                        {date}
+                      </Typography>
+                      {/* <TextField
                         fullWidth
                         size="small"
                         type="date"
                         value={date}
                         InputLabelProps={{ shrink: true }}
                         disabled={true}
-                      />
+                      /> */}
                     </Box>
                   </Grid>
                 </Grid>
@@ -217,11 +220,14 @@ const DonorView = () => {
                 <hr />
 
                 {/* Donor and Donations */}
-                <Typography variant="h6" sx={{ fontWeight: "bold", mt: 3 }}>
+                <Typography
+                  variant="h6"
+                  sx={{ fontWeight: "bold", mt: 0.2, fontSize: "17px" }}
+                >
                   Donor and Donations
                 </Typography>
 
-                <Grid container spacing={2} sx={{ mt: 1 }}>
+                <Grid container spacing={1} sx={{ mt: 0.2 }}>
                   <Grid item xs={12} sm={4}>
                     <Typography>Unique Identification Number:</Typography>
                   </Grid>
@@ -262,7 +268,7 @@ const DonorView = () => {
                       container
                       spacing={1}
                       alignItems="center"
-                      sx={{ mt: 1 }}
+                      sx={{ mt: 0.2 }}
                     >
                       <Grid item xs={12} sm={2}>
                         <Typography>Aadhar:</Typography>
@@ -298,7 +304,7 @@ const DonorView = () => {
                       container
                       spacing={1}
                       alignItems="center"
-                      sx={{ mt: 1 }}
+                      sx={{ mt: 0.2 }}
                     >
                       <Grid item xs={12} sm={2}>
                         <Typography>Mobile:</Typography>
@@ -331,69 +337,81 @@ const DonorView = () => {
                   </Grid>
                 </Grid>
 
-                <Grid container spacing={2} sx={{ mt: 1 }}>
+                <Grid container spacing={1} sx={{ mt: 0.2 }}>
                   <Grid item xs={12} sm={4}>
                     <Typography>Name of Donor:</Typography>
                   </Grid>
                   <Grid item xs={12} sm={8}>
-                    <Box sx={{ display: "flex", gap: 1 }}>
-                      <TextField
+                    <Box sx={{ display: "flex" }}>
+                      <Typography sx={{ fontWeight: "bold" }}>
+                        {donorName}
+                      </Typography>
+                      {/* <TextField
                         fullWidth
                         size="small"
                         value={donorName}
                         disabled={true}
-                      />
+                      /> */}
                     </Box>
                   </Grid>
                 </Grid>
 
-                <Grid container spacing={2} sx={{ mt: 1 }}>
+                <Grid container spacing={1} sx={{ mt: 0.2 }}>
                   <Grid item xs={12} sm={4}>
                     <Typography>Address of Donor:</Typography>
                   </Grid>
                   <Grid item xs={12} sm={8}>
-                    <Box sx={{ display: "flex", gap: 1 }}>
-                      <TextField
+                    <Box sx={{ display: "flex" }}>
+                      <Typography sx={{ fontWeight: "bold" }}>
+                        {donorAddress}
+                      </Typography>
+                      {/* <TextField
                         fullWidth
                         size="small"
                         multiline
                         rows={5}
                         value={donorAddress}
                         disabled={true}
-                      />
+                      /> */}
                     </Box>
                   </Grid>
                 </Grid>
 
-                <Grid container spacing={2} sx={{ mt: 1 }}>
+                <Grid container spacing={1} sx={{ mt: 0.2 }}>
                   <Grid item xs={12} sm={4}>
                     <Typography>Amount of Donation Received:</Typography>
                   </Grid>
                   <Grid item xs={12} sm={8}>
-                    <TextField
+                    <Typography sx={{ fontWeight: "bold" }}>
+                      {amountReceived}
+                    </Typography>
+                    {/* <TextField
                       fullWidth
                       size="small"
                       value={amountReceived}
                       disabled={true}
-                    />
+                    /> */}
                   </Grid>
                 </Grid>
 
-                <Grid container spacing={2} sx={{ mt: 1 }}>
+                <Grid container spacing={1} sx={{ mt: 0.2 }}>
                   <Grid item xs={12} sm={4}>
                     <Typography>Financial Year:</Typography>
                   </Grid>
                   <Grid item xs={12} sm={8}>
-                    <TextField
+                    <Typography sx={{ fontWeight: "bold" }}>
+                      {financialYear}
+                    </Typography>
+                    {/* <TextField
                       fullWidth
                       size="small"
                       value={financialYear}
                       disabled={true}
-                    />
+                    /> */}
                   </Grid>
                 </Grid>
 
-                <Grid container spacing={2} sx={{ mt: 1 }}>
+                <Grid container spacing={1} sx={{ mt: 0.2 }}>
                   <Grid item xs={12} sm={4}>
                     <Typography>Type of Donation:</Typography>
                   </Grid>
@@ -428,7 +446,7 @@ const DonorView = () => {
                   </Grid>
                 </Grid>
 
-                <Grid container spacing={2} sx={{ mt: 1 }}>
+                <Grid container spacing={1} sx={{ mt: 0.2 }}>
                   <Grid item xs={12} sm={4}>
                     <Typography>Section Eligible for Deduction:</Typography>
                   </Grid>
@@ -472,7 +490,7 @@ const DonorView = () => {
                   </Grid>
                 </Grid>
 
-                <Grid container spacing={2} sx={{ mt: 1 }}>
+                <Grid container spacing={1} sx={{ mt: 0.2 }}>
                   <Grid item xs={12}>
                     <Typography>
                       I, <strong>SHOAIB MOHAMMED</strong> son of{" "}
@@ -490,8 +508,8 @@ const DonorView = () => {
 
                 <Grid
                   container
-                  spacing={2}
-                  sx={{ mt: 3, justifyContent: "space-between" }}
+                  spacing={1}
+                  sx={{ mt: 2, justifyContent: "space-between" }}
                 >
                   <Grid item>
                     <Typography>Date: </Typography>

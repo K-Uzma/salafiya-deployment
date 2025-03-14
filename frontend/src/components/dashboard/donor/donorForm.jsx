@@ -10,6 +10,7 @@ import {
   Typography,
   Checkbox,
   FormControlLabel,
+  MenuItem,
 } from "@mui/material";
 import Sidebar from "../../common/sidebar";
 import moment from "moment";
@@ -63,6 +64,15 @@ const DonorForm = () => {
     }, 1000); // Cleanup after printing
   };
 
+  const currentYear = new Date().getFullYear();
+  const financialYears = Array.from(
+    { length: currentYear - 1990 + 1 },
+    (_, i) => {
+      const startYear = currentYear - i;
+      return `${startYear}-${startYear + 1}`;
+    }
+  );
+
   const [formLoading, setFormLoading] = useState(false);
   const [date, setDate] = useState(moment().format("YYYY-MM-DD"));
   const [pan, setPan] = useState(Array(10).fill(""));
@@ -71,7 +81,7 @@ const DonorForm = () => {
   const [donorName, setDonorName] = useState("");
   const [donorAddress, setDonorAddress] = useState("");
   const [amountReceived, setAmountReceived] = useState("");
-  const [financialYear, setFinancialYear] = useState("");
+  const [financialYear, setFinancialYear] = useState(financialYears[0]);
   const [typeDonation, setTypeDonation] = useState({
     corpus: false,
     specificGrants: false,
@@ -88,29 +98,59 @@ const DonorForm = () => {
   const aadharRefs = useRef([]);
   const mobileRefs = useRef([]);
 
+  const [aadharErrors, setAadharErrors] = useState(Array(12).fill(""));
+  const [mobileErrors, setMobileErrors] = useState(Array(10).fill(""));
+  const [panErrors, setPanErrors] = useState(Array(10).fill(""));
+
   const handleDateChange = (e) => {
     setDate(e.target.value);
   };
 
-  const handleBoxChange = (index, setFunction, length, refs) => (e) => {
-    const value = e.target.value.toUpperCase();
-    if (!/^[A-Z0-9]?$/.test(value)) return;
+  const handleBoxChange =
+    (index, setFunction, length, refs, setErrorFunction, type) => (e) => {
+      const value = e.target.value.toUpperCase();
 
-    let newValues = [
-      ...(setFunction === setPan
-        ? pan
-        : setFunction === setAadhar
-        ? aadhar
-        : mobile),
-    ];
-    newValues[index] = value;
-    setFunction(newValues);
+      // Define validation rule:
+      // - PAN should allow alphanumeric characters
+      // - Aadhar & Mobile should allow only numbers
+      const isValid =
+        type === "numeric" ? /^[0-9]?$/.test(value) : /^[A-Z0-9]?$/.test(value); // Alphanumeric for PAN
 
-    // Move to the next field if input is valid and not the last field
-    if (value && index < length - 1) {
-      refs.current[index + 1]?.focus();
-    }
-  };
+      // Get current values based on function
+      let newValues = [
+        ...(setFunction === setPan
+          ? pan
+          : setFunction === setAadhar
+          ? aadhar
+          : mobile),
+      ];
+
+      let newErrors = [
+        ...(setErrorFunction === setAadharErrors
+          ? aadharErrors
+          : setFunction === setPan
+          ? panErrors
+          : mobileErrors),
+      ];
+
+      if (!isValid) {
+        newErrors[index] = "Invalid";
+      } else {
+        newErrors[index] = "";
+      }
+
+      setErrorFunction(newErrors);
+
+      if (isValid) {
+        newValues[index] = value;
+        setFunction(newValues);
+
+        // Move to the next field if input is valid and not the last field
+        if (value && index < length - 1) {
+          refs.current[index + 1]?.focus();
+        }
+      }
+    };
 
   const handleKeyDown = (index, setFunction, refs) => (e) => {
     if (e.key === "Backspace") {
@@ -190,15 +230,15 @@ const DonorForm = () => {
       return;
     }
 
-    if (!financialYear.trim()) {
+    if (!financialYear) {
       toast.error("Financial Year is required");
       return;
     }
 
-    if (!/^\d{4}-\d{4}$/.test(financialYear.trim())) {
-      toast.error("Financial Year must be in YYYY-YYYY format");
-      return;
-    }
+    // if (!/^\d{4}-\d{4}$/.test(financialYear)) {
+    //   toast.error("Financial Year must be in YYYY-YYYY format");
+    //   return;
+    // }
 
     if (
       !typeDonation.corpus &&
@@ -241,7 +281,7 @@ const DonorForm = () => {
     try {
       setFormLoading(true);
       const response = await InsertNewDonor(formData);
-      handlePrint();
+      // handlePrint();
 
       // Reset fields
       setDate(moment().format("YYYY-MM-DD"));
@@ -251,7 +291,7 @@ const DonorForm = () => {
       setDonorName("");
       setDonorAddress("");
       setAmountReceived("");
-      setFinancialYear("");
+      setFinancialYear(financialYears[0]);
       setTypeDonation({
         corpus: false,
         specificGrants: false,
@@ -288,7 +328,7 @@ const DonorForm = () => {
             {/* Reporting Person Information */}
             <AdminInfo />
 
-            <Grid container spacing={2} sx={{ mt: 1, mb: 3 }}>
+            <Grid container spacing={1} sx={{ mt: 1, mb: 2 }}>
               <Grid item xs={12} sm={4}>
                 <Typography>Date of approval/Notification:</Typography>
               </Grid>
@@ -310,11 +350,14 @@ const DonorForm = () => {
             <hr />
 
             {/* Donor and Donations */}
-            <Typography variant="h6" sx={{ fontWeight: "bold", mt: 3 }}>
+            <Typography
+              variant="h6"
+              sx={{ fontWeight: "bold", mt: 1, fontSize: "17px" }}
+            >
               Donor and Donations
             </Typography>
 
-            <Grid container spacing={2} sx={{ mt: 1 }}>
+            <Grid container spacing={1} sx={{ mt: 1 }}>
               <Grid item xs={12} sm={4}>
                 <Typography>Unique Identification Number:</Typography>
               </Grid>
@@ -331,7 +374,14 @@ const DonorForm = () => {
                           key={index}
                           inputRef={(el) => (panRefs.current[index] = el)}
                           value={char}
-                          onChange={handleBoxChange(index, setPan, 10, panRefs)}
+                          onChange={handleBoxChange(
+                            index,
+                            setPan,
+                            10,
+                            panRefs,
+                            setPanErrors,
+                            "alphanumeric"
+                          )}
                           onKeyDown={handleKeyDown(index, setPan, panRefs)}
                           size="small"
                           sx={{
@@ -366,7 +416,9 @@ const DonorForm = () => {
                             index,
                             setAadhar,
                             12,
-                            aadharRefs
+                            aadharRefs,
+                            setAadharErrors,
+                            "numeric"
                           )}
                           onKeyDown={handleKeyDown(
                             index,
@@ -383,7 +435,13 @@ const DonorForm = () => {
                               p: 0,
                             },
                           }}
-                          inputProps={{ maxLength: 1 }}
+                          inputProps={{
+                            maxLength: 1,
+                            inputMode: "numeric", // Ensures numeric keyboard stays
+                            pattern: "[0-9]*", // Enforces numeric input
+                          }}
+                          error={!!aadharErrors[index]}
+                          helperText={aadharErrors[index]}
                         />
                       ))}
                     </Box>
@@ -406,7 +464,9 @@ const DonorForm = () => {
                             index,
                             setMobile,
                             10,
-                            mobileRefs
+                            mobileRefs,
+                            setMobileErrors,
+                            "numeric"
                           )}
                           onKeyDown={handleKeyDown(
                             index,
@@ -423,7 +483,13 @@ const DonorForm = () => {
                               p: 0,
                             },
                           }}
-                          inputProps={{ maxLength: 1 }}
+                          inputProps={{
+                            maxLength: 1,
+                            inputMode: "numeric", // Ensures numeric keyboard stays
+                            pattern: "[0-9]*", // Enforces numeric input
+                          }}
+                          error={!!mobileErrors[index]}
+                          helperText={mobileErrors[index]}
                         />
                       ))}
                     </Box>
@@ -432,7 +498,7 @@ const DonorForm = () => {
               </Grid>
             </Grid>
 
-            <Grid container spacing={2} sx={{ mt: 1 }}>
+            <Grid container spacing={1} sx={{ mt: 1 }}>
               <Grid item xs={12} sm={4}>
                 <Typography>Name of Donor:</Typography>
               </Grid>
@@ -448,7 +514,7 @@ const DonorForm = () => {
               </Grid>
             </Grid>
 
-            <Grid container spacing={2} sx={{ mt: 1 }}>
+            <Grid container spacing={1} sx={{ mt: 1 }}>
               <Grid item xs={12} sm={4}>
                 <Typography>Address of Donor:</Typography>
               </Grid>
@@ -466,7 +532,7 @@ const DonorForm = () => {
               </Grid>
             </Grid>
 
-            <Grid container spacing={2} sx={{ mt: 1 }}>
+            <Grid container spacing={1} sx={{ mt: 1 }}>
               <Grid item xs={12} sm={4}>
                 <Typography>Amount of Donation Received:</Typography>
               </Grid>
@@ -480,21 +546,34 @@ const DonorForm = () => {
               </Grid>
             </Grid>
 
-            <Grid container spacing={2} sx={{ mt: 1 }}>
+            <Grid container spacing={1} sx={{ mt: 1 }}>
               <Grid item xs={12} sm={4}>
                 <Typography>Financial Year:</Typography>
               </Grid>
               <Grid item xs={12} sm={8}>
-                <TextField
+                {/* <TextField
                   fullWidth
                   size="small"
                   value={financialYear}
                   onChange={(e) => setFinancialYear(e.target.value)}
-                />
+                /> */}
+                <TextField
+                  select
+                  fullWidth
+                  size="small"
+                  value={financialYear}
+                  onChange={(e) => setFinancialYear(e.target.value)}
+                >
+                  {financialYears.map((year) => (
+                    <MenuItem key={year} value={year}>
+                      {year}
+                    </MenuItem>
+                  ))}
+                </TextField>
               </Grid>
             </Grid>
 
-            <Grid container spacing={2} sx={{ mt: 1 }}>
+            <Grid container spacing={1} sx={{ mt: 1 }}>
               <Grid item xs={12} sm={4}>
                 <Typography>Type of Donation:</Typography>
               </Grid>
@@ -544,7 +623,7 @@ const DonorForm = () => {
               </Grid>
             </Grid>
 
-            <Grid container spacing={2} sx={{ mt: 1 }}>
+            <Grid container spacing={1} sx={{ mt: 1 }}>
               <Grid item xs={12} sm={4}>
                 <Typography>Section Eligible for Deduction:</Typography>
               </Grid>
@@ -608,7 +687,7 @@ const DonorForm = () => {
               </Grid>
             </Grid>
 
-            <Grid container spacing={2} sx={{ mt: 1 }}>
+            <Grid container spacing={1} sx={{ mt: 1 }}>
               <Grid item xs={12}>
                 <Typography>
                   I, <strong>SHOAIB MOHAMMED</strong> son of{" "}
@@ -626,8 +705,8 @@ const DonorForm = () => {
 
             <Grid
               container
-              spacing={2}
-              sx={{ mt: 3, justifyContent: "space-between" }}
+              spacing={1}
+              sx={{ mt: 2, justifyContent: "space-between" }}
             >
               <Grid item>
                 <Typography>Date: </Typography>
@@ -652,7 +731,7 @@ const DonorForm = () => {
               </Button>
             ) : (
               <Button variant="contained" size="small" onClick={handleSubmit}>
-                Save & Print
+                Submit
               </Button>
             )}
           </Box>

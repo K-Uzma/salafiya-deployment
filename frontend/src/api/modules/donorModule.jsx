@@ -40,3 +40,12 @@ export const DonorDetailByID = async (id) => {
     throw error;
   }
 };
+
+export const DeleteDonorByID = async (id) => {
+  try {
+    const response = await axios.delete(`${apiUrl}${api.deleteDonorByID}${id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
