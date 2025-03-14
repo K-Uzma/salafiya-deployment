@@ -10,6 +10,9 @@ const Login = lazy(() => import("../components/login"));
 const Dashboard = lazy(() => import("../components/dashboard"));
 const DonorForm = lazy(() => import("../components/dashboard/donor/donorForm"));
 const DonorView = lazy(() => import("../components/dashboard/donor/donorView"));
+const DonorPrint = lazy(() =>
+  import("../components/dashboard/donor/donorPrint")
+);
 
 const RouteIndex = () => {
   const token = localStorage.getItem("sal_cam_token");
@@ -41,6 +44,7 @@ const RouteIndex = () => {
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/add-donor" element={<DonorForm />} />
                 <Route path="/view-donor" element={<DonorView />} />
+                <Route path="/print-donor" element={<DonorPrint />} />
               </>
             )}
           </Route>

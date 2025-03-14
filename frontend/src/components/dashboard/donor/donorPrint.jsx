@@ -17,60 +17,12 @@ import { DonorDetailByID } from "../../../api/modules/donorModule";
 import { useLocation, useNavigate } from "react-router-dom";
 import AdminInfo from "./adminInfo";
 
-const DonorView = () => {
-  const location = useLocation();
+const DonorPrint = () => {
   const navigate = useNavigate();
-  const donorId = location.state?.donorId || 0; // Get donor ID from state
-
-  const handlePrint = () => {
-    navigate("/print-donor", {
-      state: { donorId: location.state?.donorId || 0 },
-    });
-  };
-
+  const location = useLocation();
   const printRef = useRef();
 
-  // const handlePrint = () => {
-  //   const printContents = printRef.current.innerHTML;
-  //   const iframe = document.createElement("iframe");
-  //   iframe.style.position = "absolute";
-  //   iframe.style.width = "0px";
-  //   iframe.style.height = "0px";
-  //   iframe.style.border = "none";
-
-  //   document.body.appendChild(iframe);
-  //   const doc = iframe.contentWindow.document;
-
-  //   // Copy styles from main page
-  //   const styles = [...document.styleSheets]
-  //     .map((sheet) => {
-  //       try {
-  //         return [...sheet.cssRules].map((rule) => rule.cssText).join("\n");
-  //       } catch (e) {
-  //         return "";
-  //       }
-  //     })
-  //     .join("\n");
-
-  //   doc.open();
-  //   doc.write(`
-  //     <html>
-  //       <head>
-  //         <title>Print</title>
-  //         <style>${styles}</style>
-  //       </head>
-  //       <body>${printContents}</body>
-  //     </html>
-  //   `);
-  //   doc.close();
-
-  //   iframe.contentWindow.focus();
-  //   iframe.contentWindow.print();
-
-  //   setTimeout(() => {
-  //     document.body.removeChild(iframe);
-  //   }, 1000); // Cleanup after printing
-  // };
+  const donorId = location.state?.donorId || 0; // Get donor ID from state
 
   const [donorData, setDonorData] = useState({});
   const [loading, setLoading] = useState(false);
@@ -170,6 +122,65 @@ const DonorView = () => {
     }
   }, [donorData]);
 
+  const handleAfterPrint = () => {
+    navigate(-1); // Navigate back after print
+  };
+
+  const handlePrintPage = () => {
+    const printContents = printRef.current.innerHTML;
+    const iframe = document.createElement("iframe");
+    iframe.style.position = "absolute";
+    iframe.style.width = "0px";
+    iframe.style.height = "0px";
+    iframe.style.border = "none";
+
+    document.body.appendChild(iframe);
+    const doc = iframe.contentWindow.document;
+
+    // Copy styles from main page
+    const styles = [...document.styleSheets]
+      .map((sheet) => {
+        try {
+          return [...sheet.cssRules].map((rule) => rule.cssText).join("\n");
+        } catch (e) {
+          return "";
+        }
+      })
+      .join("\n");
+
+    doc.open();
+    doc.write(`
+      <html>
+        <head>
+          <title>Print</title>
+          <style>${styles}</style>
+        </head>
+        <body>${printContents}</body>
+      </html>
+    `);
+    doc.close();
+
+    iframe.contentWindow.focus();
+    iframe.contentWindow.print();
+
+    setTimeout(() => {
+      document.body.removeChild(iframe);
+      handleAfterPrint();
+    }, 1000); // Cleanup after printing
+  };
+
+  useEffect(() => {
+    if (Object.keys(donorData).length !== 0) {
+      handlePrintPage();
+
+      // // Listen for print cancel or complete
+      // window.addEventListener("afterprint", handleAfterPrint);
+      // return () => {
+      //   window.removeEventListener("afterprint", handleAfterPrint);
+      // };
+    }
+  }, [donorName, donorAddress, amountReceived, financialYear]);
+
   return loading ? (
     <Box
       sx={{
@@ -186,7 +197,6 @@ const DonorView = () => {
   ) : (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <Sidebar />
       <Container sx={{ flexGrow: 1 }}>
         {Object.keys(donorData).length === 0 ? (
           <Box
@@ -551,19 +561,6 @@ const DonorView = () => {
                   </Grid>
                 </Grid>
               </div>
-
-              <Box
-                sx={{
-                  display: "flex",
-                  gap: "10px",
-                  justifyContent: "right",
-                  mt: 3,
-                }}
-              >
-                <Button variant="contained" size="small" onClick={handlePrint}>
-                  Print
-                </Button>
-              </Box>
             </Paper>
           </>
         )}
@@ -572,4 +569,4 @@ const DonorView = () => {
   );
 };
 
-export default memo(DonorView);
+export default memo(DonorPrint);
