@@ -19,70 +19,58 @@ import { useLocation } from "react-router-dom";
 import AdminInfo from "./adminInfo";
 
 const DonorView = () => {
+  const [printBtnPress, setPrintBtnPress] = useState(false);
   const printRef = useRef();
 
-  const handlePrint = () => {
-    if (!printRef.current) return;
-
-    const printContents = printRef.current.innerHTML;
-    const iframe = document.createElement("iframe");
-
-    // Hide iframe
-    iframe.style.position = "absolute";
-    iframe.style.width = "0px";
-    iframe.style.height = "0px";
-    iframe.style.border = "none";
-
-    document.body.appendChild(iframe);
-
-    // Copy styles from the main page
-    const styles = [...document.styleSheets]
-      .map((sheet) => {
-        try {
-          return [...sheet.cssRules].map((rule) => rule.cssText).join("\n");
-        } catch (e) {
-          return "";
-        }
-      })
-      .join("\n");
-
-    // Add print-specific styles to hide sidebar and fix layout
-    const printCSS = `
-      @media print {
-        body { margin: 0; padding: 0; }
-        * { box-sizing: border-box; }
-        .sidebar { display: none !important; } /* Hide sidebar */
-        .MuiContainer-root { max-width: 100% !important; } /* Expand content */
-        .MuiPaper-root { box-shadow: none !important; } /* Remove box shadows */
-      }
-    `;
-
-    const htmlContent = `
-      <html>
-        <head>
-          <title>Print</title>
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <style>${styles}</style>
-          <style>${printCSS}</style>
-        </head>
-        <body>${printContents}</body>
-      </html>
-    `;
-
-    // Use Blob for better performance
-    const blob = new Blob([htmlContent], { type: "text/html" });
-    const url = URL.createObjectURL(blob);
-
-    iframe.src = url;
-    iframe.onload = () => {
-      iframe.contentWindow.focus();
-      iframe.contentWindow.print();
-
+  useEffect(() => {
+    if (printBtnPress) {
       setTimeout(() => {
-        URL.revokeObjectURL(url);
-        document.body.removeChild(iframe);
-      }, 1500);
-    };
+        const printContents = printRef.current.innerHTML;
+        const iframe = document.createElement("iframe");
+        iframe.style.position = "absolute";
+        iframe.style.width = "0px";
+        iframe.style.height = "0px";
+        iframe.style.border = "none";
+
+        document.body.appendChild(iframe);
+        const doc = iframe.contentWindow.document;
+
+        // Copy styles from main page
+        const styles = [...document.styleSheets]
+          .map((sheet) => {
+            try {
+              return [...sheet.cssRules].map((rule) => rule.cssText).join("\n");
+            } catch (e) {
+              return "";
+            }
+          })
+          .join("\n");
+
+        doc.open();
+        doc.write(`
+        <html>
+          <head>
+            <title>Print</title>
+            <style>${styles}</style>
+          </head>
+          <body>${printContents}</body>
+        </html>
+      `);
+        doc.close();
+
+        iframe.contentWindow.focus();
+        iframe.contentWindow.print();
+
+        setTimeout(() => {
+          setPrintBtnPress(false);
+          document.body.removeChild(iframe);
+        }, 1000);
+      }, 0); // Ensures the UI updates before executing printing logic
+    }
+  }, [printBtnPress]);
+
+  const handlePrint = () => {
+    setPrintBtnPress(true);
   };
 
   const location = useLocation();
@@ -202,7 +190,7 @@ const DonorView = () => {
   ) : (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <Sidebar />
+      {!printBtnPress && <Sidebar />}
       <Container sx={{ flexGrow: 1 }}>
         {Object.keys(donorData).length === 0 ? (
           <Box
