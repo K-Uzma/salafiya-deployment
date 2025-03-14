@@ -138,20 +138,7 @@ const DonorPrint = () => {
     }
   }, [donorName, donorAddress, amountReceived, financialYear]);
 
-  return loading ? (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        height: "100vh",
-        bgcolor: "white", // Background color
-      }}
-    >
-      <CircularProgress size={30} sx={{ color: "#2e7d32" }} />
-    </Box>
-  ) : (
+  return (
     <>
       <Paper elevation={3} sx={{ p: 3, textAlign: "start" }}>
         <div id="print-content">
@@ -482,21 +469,36 @@ const DonorPrint = () => {
       <style>
         {`
                 @media print {
-                  body * {
-                    visibility: hidden;
-                  }
-                  #print-content, #print-content * {
-                    visibility: visible;
-                  }
-                  #print-content {
-                    position: absolute;
-                    left: 0;
-                    top: 0;
-                    width: 100%;
-                    height: 100%;
-                  }
+                body * {
+                  visibility: hidden;
                 }
-              `}
+                #print-content, #print-content * {
+                  visibility: visible;
+                }
+                #print-content {
+                  position: absolute;
+                  left: 0;
+                  top: 0;
+                  width: 100%;
+                  height: 100%;
+                }
+                
+                /* Hide Sidebar */
+                .sidebar, .menu, .navbar {
+                  display: none !important;
+                }
+
+                /* Hide any unwanted elements */
+                header, footer, nav {
+                  display: none !important;
+                }
+              }
+                
+              @page {
+                size: A4; /* Adjust as per your requirement */
+                margin: 2; /* Remove margins */
+              }
+        `}
       </style>
     </>
   );
