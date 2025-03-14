@@ -223,7 +223,18 @@ const DonorList = () => {
   };
 
   return loading ? (
-    <CircularProgress size={30} sx={{ color: "#2e7d32" }} />
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "100vh",
+        bgcolor: "white", // Background color
+      }}
+    >
+      <CircularProgress size={30} sx={{ color: "#2e7d32" }} />
+    </Box>
   ) : (
     <>
       <Box

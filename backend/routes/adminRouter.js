@@ -154,7 +154,7 @@ router.delete(
       await pool.execute("CALL DeleteAdminDonors(?)", [del1]);
 
       return res.status(200).json({
-        message: "Donor Deleted Successfully!",
+        message: "Donor Record Deleted Successfully!",
       });
     } catch (error) {
       return res
