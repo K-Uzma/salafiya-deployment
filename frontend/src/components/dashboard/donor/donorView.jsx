@@ -21,18 +21,65 @@ import AdminInfo from "./adminInfo";
 const DonorView = () => {
   const printRef = useRef();
 
+  // const handlePrint = () => {
+  //   const printContents = printRef.current.innerHTML;
+  //   const iframe = document.createElement("iframe");
+  //   iframe.style.position = "absolute";
+  //   iframe.style.width = "0px";
+  //   iframe.style.height = "0px";
+  //   iframe.style.border = "none";
+
+  //   document.body.appendChild(iframe);
+  //   const doc = iframe.contentWindow.document;
+
+  //   // Copy styles from main page
+  //   const styles = [...document.styleSheets]
+  //     .map((sheet) => {
+  //       try {
+  //         return [...sheet.cssRules].map((rule) => rule.cssText).join("\n");
+  //       } catch (e) {
+  //         return "";
+  //       }
+  //     })
+  //     .join("\n");
+
+  //   doc.open();
+  //   doc.write(`
+  //     <html>
+  //       <head>
+  //         <title>Print</title>
+  //         <style>${styles}</style>
+  //       </head>
+  //       <body>${printContents}</body>
+  //     </html>
+  //   `);
+  //   doc.close();
+
+  //   iframe.contentWindow.focus();
+  //   iframe.contentWindow.print();
+
+  //   setTimeout(() => {
+  //     document.body.removeChild(iframe);
+  //   }, 1000); // Cleanup after printing
+  // };
+
   const handlePrint = () => {
+    if (!printRef.current) return;
+  
     const printContents = printRef.current.innerHTML;
     const iframe = document.createElement("iframe");
+  
+    // Hide iframe
     iframe.style.position = "absolute";
     iframe.style.width = "0px";
     iframe.style.height = "0px";
     iframe.style.border = "none";
-
+  
     document.body.appendChild(iframe);
+  
     const doc = iframe.contentWindow.document;
-
-    // Copy styles from main page
+  
+    // Copy styles from the main page
     const styles = [...document.styleSheets]
       .map((sheet) => {
         try {
@@ -42,27 +89,35 @@ const DonorView = () => {
         }
       })
       .join("\n");
-
-    doc.open();
-    doc.write(`
+  
+    const htmlContent = `
       <html>
         <head>
           <title>Print</title>
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <style>${styles}</style>
         </head>
         <body>${printContents}</body>
       </html>
-    `);
-    doc.close();
-
-    iframe.contentWindow.focus();
-    iframe.contentWindow.print();
-
-    setTimeout(() => {
-      document.body.removeChild(iframe);
-    }, 1000); // Cleanup after printing
+    `;
+  
+    // Use Blob for better performance
+    const blob = new Blob([htmlContent], { type: "text/html" });
+    const url = URL.createObjectURL(blob);
+  
+    iframe.src = url;
+    iframe.onload = () => {
+      iframe.contentWindow.focus();
+      iframe.contentWindow.print();
+  
+      setTimeout(() => {
+        URL.revokeObjectURL(url);
+        document.body.removeChild(iframe);
+      }, 1500); // Allow time for printing
+    };
   };
 
+  
   const location = useLocation();
   const donorId = location.state?.donorId || 0; // Get donor ID from state
 
