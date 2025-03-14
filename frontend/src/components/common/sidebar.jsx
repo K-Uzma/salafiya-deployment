@@ -13,7 +13,7 @@ import {
   DialogTitle,
   Box,
   IconButton,
-  useMediaQuery
+  useMediaQuery,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -28,6 +28,7 @@ const Sidebar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isPrinting = window.matchMedia("print").matches;
 
   const handleNavigation = (path) => {
     navigate(path);
@@ -64,7 +65,7 @@ const Sidebar = () => {
       >
         Salafiya Education & Welfare Trust
       </Typography>
-  
+
       {/* Location */}
       <Typography
         variant="caption"
@@ -79,7 +80,7 @@ const Sidebar = () => {
       >
         Solapur
       </Typography>
-  
+
       {/* Styled Horizontal Rule */}
       <Box sx={{ width: "80%", mx: "auto", my: 1 }}>
         <hr
@@ -90,7 +91,7 @@ const Sidebar = () => {
           }}
         />
       </Box>
-  
+
       {/* Sidebar Menu */}
       <List sx={{ mt: 2 }}>
         {[
@@ -102,7 +103,8 @@ const Sidebar = () => {
             key={index}
             onClick={() => handleNavigation(item.path)}
             sx={{
-              bgcolor: location.pathname === item.path ? "#2e7d3275" : "inherit",
+              bgcolor:
+                location.pathname === item.path ? "#2e7d3275" : "inherit",
               cursor: "pointer",
               borderRadius: 2,
               my: 0.5,
@@ -122,10 +124,10 @@ const Sidebar = () => {
           </ListItem>
         ))}
       </List>
-  
+
       {/* Push Logout Button to Bottom */}
       <Box sx={{ flexGrow: 1 }} />
-  
+
       {/* Logout Button */}
       <Button
         color="error"
@@ -149,9 +151,8 @@ const Sidebar = () => {
       </Button>
     </Box>
   );
-  
 
-  return (
+  return !isPrinting ? (
     <>
       {isMobile ? (
         <>
@@ -187,12 +188,22 @@ const Sidebar = () => {
       )}
 
       {/* Logout Confirmation Dialog */}
-      <Dialog open={openLogoutDialog} onClose={() => setOpenLogoutDialog(false)}>
-        <DialogTitle sx={{ textAlign: "center", fontWeight: "bold", color: "#d32f2f" }}>
+      <Dialog
+        open={openLogoutDialog}
+        onClose={() => setOpenLogoutDialog(false)}
+      >
+        <DialogTitle
+          sx={{ textAlign: "center", fontWeight: "bold", color: "#d32f2f" }}
+        >
           Confirm Logout
         </DialogTitle>
         <DialogContent>
-          <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            gap={2}
+          >
             <LogoutIcon sx={{ fontSize: 50, color: "#d32f2f" }} />
             <DialogContentText sx={{ fontSize: "1.1rem", textAlign: "center" }}>
               Are you sure you want to logout?
@@ -200,16 +211,25 @@ const Sidebar = () => {
           </Box>
         </DialogContent>
         <DialogActions sx={{ justifyContent: "center", pb: 2 }}>
-          <Button onClick={() => setOpenLogoutDialog(false)} variant="outlined" color="primary">
+          <Button
+            onClick={() => setOpenLogoutDialog(false)}
+            variant="outlined"
+            color="primary"
+          >
             No
           </Button>
-          <Button onClick={handleLogout} variant="contained" color="error" autoFocus>
+          <Button
+            onClick={handleLogout}
+            variant="contained"
+            color="error"
+            autoFocus
+          >
             Yes
           </Button>
         </DialogActions>
       </Dialog>
     </>
-  );
+  ) : null;
 };
 
 export default memo(Sidebar);

@@ -138,6 +138,24 @@ const DonorPrint = () => {
     }
   }, [donorName, donorAddress, amountReceived, financialYear]);
 
+  useEffect(() => {
+    const mediaQueryList = window.matchMedia("print");
+
+    const handlePrintChange = (event) => {
+      if (event.matches) {
+        document.body.classList.add("hide-sidebar");
+      } else {
+        document.body.classList.remove("hide-sidebar");
+      }
+    };
+
+    mediaQueryList.addEventListener("change", handlePrintChange);
+
+    return () => {
+      mediaQueryList.removeEventListener("change", handlePrintChange);
+    };
+  }, []);
+
   return (
     <>
       <Paper elevation={3} sx={{ p: 3, textAlign: "start" }}>
@@ -487,6 +505,10 @@ const DonorPrint = () => {
                 .MuiDrawer-root, .MuiDrawer-paper {
                   display: none !important;
                 }
+              }
+
+              .hide-sidebar .MuiDrawer-root {
+                display: none !important;
               }
                 
               @page {
