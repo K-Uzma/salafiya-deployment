@@ -133,24 +133,18 @@ const DonorPrint = () => {
     }
   }, [donorName, donorAddress, amountReceived, financialYear]);
 
-  useEffect(() => {
-    if (window.matchMedia("print").matches) {
-      document.body.style.zoom = "100%"; // Prevents zooming issues
-    }
-  }, []);
-
   return (
     <>
       <Paper elevation={3} sx={{ p: 3, textAlign: "start" }}>
         <div id="print-content">
           <Box
             sx={{
-              width: "210mm", // Ensures A4 width
-              minHeight: "297mm", // Ensures full A4 height
-              border: "1px solid black",
+              border: "1px solid black", // Border styling
+              borderRadius: "5px",
               padding: "15px",
+              maxWidth: "100%", // Adjust width as needed
+              margin: "auto", // Centering horizontally
               backgroundColor: "#fff",
-              margin: "auto",
             }}
           >
             {/* Reporting Person Information */}
@@ -471,8 +465,8 @@ const DonorPrint = () => {
   {`
     @media print {
   @page {
-    size: A4 portrait; /* Enforce A4 size */
-    margin: 10mm; /* Ensure consistent margin */
+    size: A4;
+    margin: 0;
   }
 
   body {
@@ -481,26 +475,12 @@ const DonorPrint = () => {
   }
 
   #print-content {
-    width: 210mm !important; /* Set A4 width */
-    min-height: 297mm !important; /* Set A4 height */
-    max-height: 297mm !important;
-    margin: auto;
-    padding: 10mm;
-    font-size: 12px; /* Adjust for better fit */
-  }
-
-  #print-content, #print-content * {
-    page-break-inside: avoid !important; /* Avoid breaking cards */
-  }
-
-  /* Prevents mobile from resizing */
-  html, body {
     width: 100%;
-    height: auto;
-    overflow: visible;
+    height: 100vh;
+    overflow: hidden;
+    page-break-before: avoid !important;
   }
 }
-
   `}
 </style>
 

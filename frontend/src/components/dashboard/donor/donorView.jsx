@@ -24,6 +24,7 @@ const DonorView = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isPrinting = window.matchMedia("print").matches;
   const donorId = location.state?.donorId || 0; // Get donor ID from state
 
   const printRef = useRef();
@@ -566,18 +567,24 @@ const DonorView = () => {
                 </Grid>
               </div>
 
-              <Box
-                sx={{
-                  display: "flex",
-                  gap: "10px",
-                  justifyContent: "right",
-                  mt: 3,
-                }}
-              >
-                <Button variant="contained" size="small" onClick={handlePrint}>
-                  Print
-                </Button>
-              </Box>
+              {!isPrinting ? (
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: "10px",
+                    justifyContent: "right",
+                    mt: 3,
+                  }}
+                >
+                  <Button
+                    variant="contained"
+                    size="small"
+                    onClick={handlePrint}
+                  >
+                    Print
+                  </Button>
+                </Box>
+              ) : null}
             </Paper>
           </>
         )}
