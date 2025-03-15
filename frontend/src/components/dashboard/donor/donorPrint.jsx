@@ -123,13 +123,11 @@ const DonorPrint = () => {
 
   useEffect(() => {
     if (Object.keys(donorData).length !== 0) {
-      alert(`print page`);
-      // Print the page
-      window.print();
-
       setTimeout(() => {
-        navigate(-1); // Navigate back
-      }, 700); // Adjust the timeout if needed
+        document.body.style.zoom = "90%"; // Adjust zoom for better fit
+        window.print();
+        navigate(-1);
+      }, 500);
     }
   }, [donorName, donorAddress, amountReceived, financialYear]);
 
@@ -462,27 +460,45 @@ const DonorPrint = () => {
         </div>
       </Paper>
       <style>
-  {`
+        {`
     @media print {
-  @page {
-    size: A4;
-    margin: 0;
-  }
+    @page {
+      size: A4 portrait; /* Set to A4 size */
+      margin: 0; /* Remove margins */
+    }
 
-  body {
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
+    body {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
 
+    #print-content {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    * {
+      font-size: 12px; /* Reduce font size for better fit */
+    }
+
+    /* Hide any non-essential elements */
+    button, .no-print {
+      display: none !important;
+    }
+
+    @media screen and (max-width: 600px) {
   #print-content {
-    width: 100%;
-    height: 100vh;
-    overflow: hidden;
-    page-break-before: avoid !important;
+    font-size: 10px; /* Reduce font size */
   }
 }
+  }
   `}
-</style>
+      </style>
     </>
   );
 };
