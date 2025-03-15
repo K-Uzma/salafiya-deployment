@@ -133,6 +133,15 @@ const DonorPrint = () => {
     }
   }, [donorName, donorAddress, amountReceived, financialYear]);
 
+  useEffect(() => {
+    if (window.matchMedia("print").matches) {
+      document.body.style.zoom = "100%"; // Prevents shrinking
+      document.body.style.transform = "scale(1)";
+      document.body.style.transformOrigin = "top left";
+    }
+  }, []);
+
+  
   return (
     <>
       <Paper elevation={3} sx={{ p: 3, textAlign: "start" }}>
@@ -465,22 +474,34 @@ const DonorPrint = () => {
   {`
     @media print {
   @page {
-    size: A4;
-    margin: 0;
+    size: A4 portrait; /* Forces A4 page size */
+    margin: 0; /* Remove extra margins */
   }
 
   body {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
   }
 
   #print-content {
-    width: 100%;
-    height: 100vh;
-    overflow: hidden;
-    page-break-before: avoid !important;
+    width: 210mm !important;  /* Ensures exact A4 width */
+    min-height: 297mm !important; /* Ensures full A4 height */
+    max-height: 297mm !important;
+    margin: 0 auto;
+    padding: 10mm;
+    box-sizing: border-box;
+  }
+
+  #print-content, #print-content * {
+    page-break-inside: avoid !important;
   }
 }
+
   `}
 </style>
 
