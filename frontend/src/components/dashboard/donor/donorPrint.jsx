@@ -176,7 +176,7 @@ const DonorPrint = () => {
               variant="h6"
               sx={{ fontWeight: "bold", mt: 0.1, fontSize: "16px" }}
             >
-              Donor and Donations
+              Donor and Donations test
             </Typography>
 
             <Grid container spacing={1} sx={{ mt: 0.1 }}>
@@ -477,7 +477,7 @@ const DonorPrint = () => {
 
       #print-content {
         width: 100%;
-        height: 90vh;
+        height: 80vh;
         overflow: hidden;
         page-break-before: avoid !important;
         font-size: 10px !important;
