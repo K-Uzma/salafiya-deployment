@@ -462,7 +462,7 @@ const DonorPrint = () => {
         </div>
       </Paper>
       <style>
-        {`
+  {`
     @media print {
   @page {
     size: A4;
@@ -480,12 +480,9 @@ const DonorPrint = () => {
     overflow: hidden;
     page-break-before: avoid !important;
   }
-    .MuiPaper-root {
-    display: none !important; /* Hides MUI Container and Paper */
-  }
 }
   `}
-      </style>
+</style>
     </>
   );
 };
