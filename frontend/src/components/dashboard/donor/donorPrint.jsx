@@ -121,14 +121,8 @@ const DonorPrint = () => {
     }
   }, [donorData]);
 
-  // const handleAfterPrint = () => {
-  //   navigate(-1); // Navigate back after print
-  // };
-
   useEffect(() => {
     if (Object.keys(donorData).length !== 0) {
-      // handlePrintPage();
-
       // Print the page
       window.print();
 
@@ -137,24 +131,6 @@ const DonorPrint = () => {
       }, 700); // Adjust the timeout if needed
     }
   }, [donorName, donorAddress, amountReceived, financialYear]);
-
-  // useEffect(() => {
-  //   const mediaQueryList = window.matchMedia("print");
-
-  //   const handlePrintChange = (event) => {
-  //     if (event.matches) {
-  //       document.body.classList.add("hide-sidebar");
-  //     } else {
-  //       document.body.classList.remove("hide-sidebar");
-  //     }
-  //   };
-
-  //   mediaQueryList.addEventListener("change", handlePrintChange);
-
-  //   return () => {
-  //     mediaQueryList.removeEventListener("change", handlePrintChange);
-  //   };
-  // }, []);
 
   return (
     <>
@@ -487,25 +463,24 @@ const DonorPrint = () => {
       <style>
         {`
                 @media print {
-                body * {
-                  visibility: hidden;
-                }
-                #print-content, #print-content * {
-                  visibility: visible;
-                }
-                #print-content {
-                  position: absolute;
-                  left: 0;
-                  top: 0;
-                  width: 100%;
-                  height: 100%;
-                }
+  @page {
+    size: A4;
+    margin: 0;
+  }
 
-                /* Hide Sidebar */
-                .MuiDrawer-root, .MuiDrawer-paper {
-                  display: none !important;
-                }
-              }
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  #print-content {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    page-break-before: always;
+  }
+}
+
 
         `}
       </style>
