@@ -123,6 +123,7 @@ const DonorPrint = () => {
 
   useEffect(() => {
     if (Object.keys(donorData).length !== 0) {
+      alert(`print page`);
       // Print the page
       window.print();
 
@@ -461,29 +462,33 @@ const DonorPrint = () => {
         </div>
       </Paper>
       <style>
-        {`
-                @media print {
-  @page {
-    size: A4; /* Keep A4 page size */
-    margin: 0;
-  }
+  {`
+    @media print {
+      @page {
+        size: A4; /* Keep A4 page size */
+        margin: 0;
+      }
 
-  body {
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
+      body {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
 
-  #print-content {
-    transform: scale(0.85); /* Adjust scale for mobile */
-    transform-origin: top left;
-    width: 100%;
-    height: auto;
-    overflow: hidden;
-  }
-}
+      #print-content {
+        transform: scale(0.85); /* Adjust scale for mobile */
+        transform-origin: top left;
+        width: 100vw !important;
+        height: 95vh !important; /* Prevents cutting content */
+        overflow: hidden !important;
+      }
 
-        `}
-      </style>
+      #print-content, #print-content * {
+        page-break-inside: avoid !important;
+      }
+    }
+  `}
+</style>
+
     </>
   );
 };
