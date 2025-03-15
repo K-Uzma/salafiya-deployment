@@ -465,7 +465,7 @@ const DonorPrint = () => {
         {`
     @media print {
       @page {
-        size: A4;
+        size: A3;
         margin: 0 !important;
         padding: 0 !important;
       }
