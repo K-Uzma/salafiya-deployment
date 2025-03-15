@@ -284,8 +284,8 @@ const DonorView = () => {
                                 value={char}
                                 size="small"
                                 sx={{
-                                  width: { xs: "8%", sm: "30px" },
-                                  minWidth: "25px",
+                                  width: { xs: "5%", sm: "20px" },
+                                  minWidth: "20px",
                                   textAlign: "center",
                                   "& .MuiInputBase-input": {
                                     textAlign: "center",
@@ -320,8 +320,8 @@ const DonorView = () => {
                                 value={char}
                                 size="small"
                                 sx={{
-                                  width: { xs: "7%", sm: "30px" },
-                                  minWidth: "25px",
+                                  width: { xs: "5%", sm: "20px" },
+                                  minWidth: "20px",
                                   textAlign: "center",
                                   "& .MuiInputBase-input": {
                                     textAlign: "center",
@@ -356,8 +356,8 @@ const DonorView = () => {
                                 value={char}
                                 size="small"
                                 sx={{
-                                  width: { xs: "9%", sm: "30px" },
-                                  minWidth: "25px",
+                                  width: { xs: "5%", sm: "20px" },
+                                  minWidth: "20px",
                                   textAlign: "center",
                                   "& .MuiInputBase-input": {
                                     textAlign: "center",

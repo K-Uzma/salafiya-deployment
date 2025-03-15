@@ -38,7 +38,7 @@ const adminInfo = () => {
 
       <hr />
 
-      <Typography variant="body2" sx={{ mb: 1, fontSize: "12px" }}>
+      <Typography variant="body2" sx={{ mb: 1, fontSize: "10px" }}>
         Certificate of donation under clause (ix) of sub-section (5) of section
         80G and under clause (ii) to sub-section (1A) of section 35 of the
         Income-tax Act, 1961
@@ -54,7 +54,7 @@ const adminInfo = () => {
         Donee
       </Typography>
 
-      <Grid container spacing={1} sx={{ mt: 0.2 }}>
+      <Grid container spacing={1} sx={{ mt: 0.1 }}>
         <Grid item xs={12} sm={4}>
           <Typography>PAN of the reporting person:</Typography>
         </Grid>
@@ -67,8 +67,8 @@ const adminInfo = () => {
                   value={char}
                   size="small"
                   sx={{
-                    width: "30px",
-                    height: "30px",
+                    width: "20px",
+                    height: "20px",
                     textAlign: "center",
                     "& .MuiInputBase-input": {
                       textAlign: "center",
@@ -84,7 +84,7 @@ const adminInfo = () => {
         </Grid>
       </Grid>
 
-      <Grid container spacing={1} sx={{ mt: 0.2 }}>
+      <Grid container spacing={1} sx={{ mt: 0.1 }}>
         <Grid item xs={12} sm={4}>
           <Typography>Name of the reporting person:</Typography>
         </Grid>
@@ -97,7 +97,7 @@ const adminInfo = () => {
         </Grid>
       </Grid>
 
-      <Grid container spacing={1} sx={{ mt: 0.2 }}>
+      <Grid container spacing={1} sx={{ mt: 0.1 }}>
         <Grid item xs={12} sm={4}>
           <Typography>Address of the reporting person:</Typography>
         </Grid>
@@ -111,7 +111,7 @@ const adminInfo = () => {
         </Grid>
       </Grid>
 
-      <Grid container spacing={1} sx={{ mt: 0.2 }}>
+      <Grid container spacing={1} sx={{ mt: 0.1 }}>
         <Grid item xs={12} sm={4}>
           <Typography>
             Order number granting approval under section 80G:
