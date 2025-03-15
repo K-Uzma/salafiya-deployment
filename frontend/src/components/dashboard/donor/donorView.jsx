@@ -194,7 +194,7 @@ const DonorView = () => {
     </Box>
   ) : (
     <Box sx={{ display: "flex" }}>
-      <CssBaseline />
+      {!isPrinting ? (<CssBaseline />) : null}
       <Sidebar />
       <Container sx={{ flexGrow: 1 }}>
         {Object.keys(donorData).length === 0 ? (
