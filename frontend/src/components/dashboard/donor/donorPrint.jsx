@@ -122,14 +122,16 @@ const DonorPrint = () => {
   }, [donorData]);
 
   useEffect(() => {
-    if (donorName && donorAddress && amountReceived && financialYear) {
+    if (Object.keys(donorData).length !== 0) {
+      alert(`print page`);
+      // Print the page
+      window.print();
+
       setTimeout(() => {
-        window.print();
-        navigate(-1);
-      }, 1000); // Increased timeout to ensure data renders properly
+        navigate(-1); // Navigate back
+      }, 700); // Adjust the timeout if needed
     }
   }, [donorName, donorAddress, amountReceived, financialYear]);
-  
 
   return (
     <>
@@ -462,36 +464,26 @@ const DonorPrint = () => {
       <style>
         {`
     @media print {
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
   body {
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
 
   #print-content {
-    width: 210mm; /* A4 width */
-    min-height: 297mm; /* A4 height */
-    margin: 0 auto;
-    padding: 15mm;
-    background-color: white !important;
-    font-size: 12pt; /* Ensure consistent text size */
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    page-break-before: avoid !important;
   }
-
-  /* Ensure font consistency */
-  * {
-    font-family: Arial, sans-serif !important;
-  }
-
-  /* Prevent page breaks inside critical sections */
-  .no-break {
-    break-inside: avoid;
-  }
-
-  .page-break {
-    page-break-before: always;
+    .MuiPaper-root {
+    display: none !important; /* Hides MUI Container and Paper */
   }
 }
-
-
   `}
       </style>
     </>
