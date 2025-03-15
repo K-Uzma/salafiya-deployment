@@ -133,20 +133,6 @@ const DonorPrint = () => {
     }
   }, [donorName, donorAddress, amountReceived, financialYear]);
 
-  useEffect(() => {
-    const mediaQueryList = window.matchMedia("print");
-  
-    const fixZoom = () => {
-      document.body.style.zoom = "100%"; // Prevents auto-rescaling
-      document.body.style.transform = "scale(1)";
-      document.body.style.transformOrigin = "top left";
-    };
-  
-    mediaQueryList.addListener(fixZoom);
-    return () => mediaQueryList.removeListener(fixZoom);
-  }, []);
-  
-
   return (
     <>
       <Paper elevation={3} sx={{ p: 3, textAlign: "start" }}>
@@ -478,42 +464,16 @@ const DonorPrint = () => {
       <style>
         {`
     @media print {
-  @page {
-    size: A4 portrait; /* Enforces A4 paper size */
-    margin: 0; /* Removes extra margins */
-  }
-
-  body {
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-    margin: 0;
-    padding: 0;
-    width: 210mm; /* Forces A4 width */
-    height: 297mm; /* Forces full A4 height */
-    overflow: hidden; /* Prevents unwanted scrolling */
+  .MuiContainer-root, .MuiPaper-root {
+    display: none !important; /* Hides MUI Container and Paper */
   }
 
   #print-content {
-    width: 210mm !important; /* Ensures full A4 width */
-    min-height: 297mm !important; /* Ensures full A4 height */
-    max-height: 297mm !important;
+    width: 210mm !important; /* Ensure full A4 width */
+    min-height: 297mm !important; /* Ensure full A4 height */
     margin: 0 auto;
     padding: 10mm;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-
-  #print-content, #print-content * {
-    page-break-inside: avoid !important;
-  }
-
-  /* Prevent mobile from shrinking content */
-  html, body {
-    zoom: 100% !important;
-    transform: scale(1) !important;
-    transform-origin: top left !important;
+    background-color: #fff !important; /* Ensure white background */
   }
 }
 
