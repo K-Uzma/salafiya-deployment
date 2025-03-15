@@ -141,7 +141,6 @@ const DonorPrint = () => {
     }
   }, []);
 
-  
   return (
     <>
       <Paper elevation={3} sx={{ p: 3, textAlign: "start" }}>
@@ -471,11 +470,11 @@ const DonorPrint = () => {
         </div>
       </Paper>
       <style>
-  {`
+        {`
     @media print {
   @page {
-    size: A4 portrait; /* Forces A4 page size */
-    margin: 0; /* Remove extra margins */
+    size: A4 portrait; /* Enforces A4 paper size */
+    margin: 0; /* Removes extra margins */
   }
 
   body {
@@ -483,28 +482,37 @@ const DonorPrint = () => {
     print-color-adjust: exact;
     margin: 0;
     padding: 0;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
+    width: 210mm; /* Forces A4 width */
+    height: 297mm; /* Forces full A4 height */
+    overflow: hidden; /* Prevents unwanted scrolling */
   }
 
   #print-content {
-    width: 210mm !important;  /* Ensures exact A4 width */
+    width: 210mm !important; /* Ensures full A4 width */
     min-height: 297mm !important; /* Ensures full A4 height */
     max-height: 297mm !important;
     margin: 0 auto;
     padding: 10mm;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
 
   #print-content, #print-content * {
     page-break-inside: avoid !important;
   }
+
+  /* Prevent mobile from shrinking content */
+  html, body {
+    zoom: 100% !important;
+    transform: scale(1) !important;
+    transform-origin: top left !important;
+  }
 }
 
   `}
-</style>
-
+      </style>
     </>
   );
 };
