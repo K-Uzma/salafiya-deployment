@@ -123,7 +123,7 @@ const DonorPrint = () => {
 
   useEffect(() => {
     if (Object.keys(donorData).length !== 0) {
-      alert(`print page`);
+      // alert(`print page`);
       // Print the page
       window.print();
 
