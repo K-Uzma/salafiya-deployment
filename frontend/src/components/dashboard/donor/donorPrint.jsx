@@ -507,14 +507,6 @@ const DonorPrint = () => {
                 }
               }
 
-              .hide-sidebar .MuiDrawer-root {
-                display: none !important;
-              }
-                
-              @page {
-                size: A4; /* Adjust as per your requirement */
-                margin: 2; /* Remove margins */
-              }
         `}
       </style>
     </>
