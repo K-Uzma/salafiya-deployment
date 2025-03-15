@@ -464,7 +464,7 @@ const DonorPrint = () => {
         {`
                 @media print {
   @page {
-    size: A4;
+    size: A4; /* Keep A4 page size */
     margin: 0;
   }
 
@@ -474,13 +474,13 @@ const DonorPrint = () => {
   }
 
   #print-content {
+    transform: scale(0.85); /* Adjust scale for mobile */
+    transform-origin: top left;
     width: 100%;
-    height: 100vh;
+    height: auto;
     overflow: hidden;
-    page-break-before: always;
   }
 }
-
 
         `}
       </style>
