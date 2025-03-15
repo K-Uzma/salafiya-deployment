@@ -138,23 +138,23 @@ const DonorPrint = () => {
     }
   }, [donorName, donorAddress, amountReceived, financialYear]);
 
-  useEffect(() => {
-    const mediaQueryList = window.matchMedia("print");
+  // useEffect(() => {
+  //   const mediaQueryList = window.matchMedia("print");
 
-    const handlePrintChange = (event) => {
-      if (event.matches) {
-        document.body.classList.add("hide-sidebar");
-      } else {
-        document.body.classList.remove("hide-sidebar");
-      }
-    };
+  //   const handlePrintChange = (event) => {
+  //     if (event.matches) {
+  //       document.body.classList.add("hide-sidebar");
+  //     } else {
+  //       document.body.classList.remove("hide-sidebar");
+  //     }
+  //   };
 
-    mediaQueryList.addEventListener("change", handlePrintChange);
+  //   mediaQueryList.addEventListener("change", handlePrintChange);
 
-    return () => {
-      mediaQueryList.removeEventListener("change", handlePrintChange);
-    };
-  }, []);
+  //   return () => {
+  //     mediaQueryList.removeEventListener("change", handlePrintChange);
+  //   };
+  // }, []);
 
   return (
     <>
