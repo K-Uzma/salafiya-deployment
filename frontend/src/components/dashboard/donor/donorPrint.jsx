@@ -123,11 +123,13 @@ const DonorPrint = () => {
 
   useEffect(() => {
     if (Object.keys(donorData).length !== 0) {
+      alert(`print page`);
+      // Print the page
+      window.print();
+
       setTimeout(() => {
-        document.body.style.zoom = "90%"; // Adjust zoom for better fit
-        window.print();
-        navigate(-1);
-      }, 500);
+        navigate(-1); // Navigate back
+      }, 700); // Adjust the timeout if needed
     }
   }, [donorName, donorAddress, amountReceived, financialYear]);
 
@@ -462,41 +464,24 @@ const DonorPrint = () => {
       <style>
         {`
     @media print {
-    @page {
-      size: A4 portrait; /* Set to A4 size */
-      margin: 0; /* Remove margins */
-    }
+  @page {
+    size: A4;
+    margin: 0;
+  }
 
-    body {
-      -webkit-print-color-adjust: exact;
-      print-color-adjust: exact;
-    }
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
 
-    #print-content {
-      width: 100vw;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-    }
-
-    * {
-      font-size: 12px; /* Reduce font size for better fit */
-    }
-
-    /* Hide any non-essential elements */
-    button, .no-print {
-      display: none !important;
-    }
-
-    @media screen and (max-width: 600px) {
   #print-content {
-    font-size: 10px; /* Reduce font size */
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    page-break-before: avoid !important;
+    font-size: 10px !important;
   }
 }
-  }
   `}
       </style>
     </>
