@@ -122,16 +122,14 @@ const DonorPrint = () => {
   }, [donorData]);
 
   useEffect(() => {
-    if (Object.keys(donorData).length !== 0) {
-      alert(`print page`);
-      // Print the page
-      window.print();
-
+    if (donorName && donorAddress && amountReceived && financialYear) {
       setTimeout(() => {
-        navigate(-1); // Navigate back
-      }, 700); // Adjust the timeout if needed
+        window.print();
+        navigate(-1);
+      }, 1000); // Increased timeout to ensure data renders properly
     }
   }, [donorName, donorAddress, amountReceived, financialYear]);
+  
 
   return (
     <>
@@ -464,18 +462,35 @@ const DonorPrint = () => {
       <style>
         {`
     @media print {
-  .MuiContainer-root, .MuiPaper-root {
-    display: none !important; /* Hides MUI Container and Paper */
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 
   #print-content {
-    width: 210mm !important; /* Ensure full A4 width */
-    min-height: 297mm !important; /* Ensure full A4 height */
+    width: 210mm; /* A4 width */
+    min-height: 297mm; /* A4 height */
     margin: 0 auto;
-    padding: 10mm;
-    background-color: #fff !important; /* Ensure white background */
+    padding: 15mm;
+    background-color: white !important;
+    font-size: 12pt; /* Ensure consistent text size */
+  }
+
+  /* Ensure font consistency */
+  * {
+    font-family: Arial, sans-serif !important;
+  }
+
+  /* Prevent page breaks inside critical sections */
+  .no-break {
+    break-inside: avoid;
+  }
+
+  .page-break {
+    page-break-before: always;
   }
 }
+
 
   `}
       </style>
