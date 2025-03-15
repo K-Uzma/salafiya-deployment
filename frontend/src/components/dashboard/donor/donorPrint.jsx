@@ -134,12 +134,18 @@ const DonorPrint = () => {
   }, [donorName, donorAddress, amountReceived, financialYear]);
 
   useEffect(() => {
-    if (window.matchMedia("print").matches) {
-      document.body.style.zoom = "100%"; // Prevents shrinking
+    const mediaQueryList = window.matchMedia("print");
+  
+    const fixZoom = () => {
+      document.body.style.zoom = "100%"; // Prevents auto-rescaling
       document.body.style.transform = "scale(1)";
       document.body.style.transformOrigin = "top left";
-    }
+    };
+  
+    mediaQueryList.addListener(fixZoom);
+    return () => mediaQueryList.removeListener(fixZoom);
   }, []);
+  
 
   return (
     <>
