@@ -218,7 +218,7 @@ const DonorView = () => {
           </Box>
         ) : (
           <>
-            <Paper elevation={3} sx={{ p: 3, textAlign: "start" }}>
+            <Paper elevation={3} sx={{ p: 2, textAlign: "start" }}>
               <div ref={printRef}>
                 <Box
                   sx={{
@@ -233,7 +233,7 @@ const DonorView = () => {
                   {/* Reporting Person Information */}
                   <AdminInfo />
 
-                  <Grid container spacing={1} sx={{ mt: 0.2, mb: 2 }}>
+                  <Grid container spacing={1} sx={{ mt: 0.1, mb: 1 }}>
                     <Grid item xs={12} sm={4}>
                       <Typography>Date of approval/Notification:</Typography>
                     </Grid>
@@ -264,7 +264,7 @@ const DonorView = () => {
                     Donor and Donations
                   </Typography>
 
-                  <Grid container spacing={1} sx={{ mt: 0.2 }}>
+                  <Grid container spacing={1} sx={{ mt: 0.1 }}>
                     <Grid item xs={12} sm={4}>
                       <Typography>Unique Identification Number:</Typography>
                     </Grid>
@@ -374,7 +374,7 @@ const DonorView = () => {
                     </Grid>
                   </Grid>
 
-                  <Grid container spacing={1} sx={{ mt: 0.2 }}>
+                  <Grid container spacing={1} sx={{ mt: 0.1 }}>
                     <Grid item xs={12} sm={4}>
                       <Typography>Name of Donor:</Typography>
                     </Grid>
@@ -393,7 +393,7 @@ const DonorView = () => {
                     </Grid>
                   </Grid>
 
-                  <Grid container spacing={1} sx={{ mt: 0.2 }}>
+                  <Grid container spacing={1} sx={{ mt: 0.1 }}>
                     <Grid item xs={12} sm={4}>
                       <Typography>Address of Donor:</Typography>
                     </Grid>
@@ -414,7 +414,7 @@ const DonorView = () => {
                     </Grid>
                   </Grid>
 
-                  <Grid container spacing={1} sx={{ mt: 0.2 }}>
+                  <Grid container spacing={1} sx={{ mt: 0.1 }}>
                     <Grid item xs={12} sm={4}>
                       <Typography>Amount of Donation Received:</Typography>
                     </Grid>
@@ -431,7 +431,7 @@ const DonorView = () => {
                     </Grid>
                   </Grid>
 
-                  <Grid container spacing={1} sx={{ mt: 0.2 }}>
+                  <Grid container spacing={1} sx={{ mt: 0.1 }}>
                     <Grid item xs={12} sm={4}>
                       <Typography>Financial Year:</Typography>
                     </Grid>
@@ -448,7 +448,7 @@ const DonorView = () => {
                     </Grid>
                   </Grid>
 
-                  <Grid container spacing={0.3} sx={{ mt: 0.2 }}>
+                  <Grid container spacing={0.2} sx={{ mt: 0.1 }}>
                     <Grid item xs={12} sm={4}>
                       <Typography>Type of Donation:</Typography>
                     </Grid>
@@ -529,7 +529,7 @@ const DonorView = () => {
 
                   <Grid container spacing={0.3} sx={{ mt: 0.3 }}>
                     <Grid item xs={12}>
-                      <Typography sx={{ fontSize: "14px" }}>
+                      <Typography sx={{ fontSize: "10px" }}>
                         I, <strong>SHOAIB MOHAMMED</strong> son of{" "}
                         <strong>TAJODDIN</strong> solemnly declare that to the
                         best of my knowledge and belief, the information given
@@ -548,13 +548,13 @@ const DonorView = () => {
                 <Grid
                   container
                   spacing={1}
-                  sx={{ mt: 2, justifyContent: "space-between" }}
+                  sx={{ mt: 1, justifyContent: "space-between" }}
                 >
                   <Grid item>
-                    <Typography sx={{ fontSize: "14px" }}>Date: </Typography>
+                    <Typography sx={{ fontSize: "10px" }}>Date: </Typography>
                   </Grid>
                   <Grid item>
-                    <Typography sx={{ fontSize: "14px" }}>
+                    <Typography sx={{ fontSize: "10px" }}>
                       Signature:
                     </Typography>
                   </Grid>

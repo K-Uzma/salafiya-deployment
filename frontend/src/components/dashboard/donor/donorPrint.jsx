@@ -176,7 +176,7 @@ const DonorPrint = () => {
               variant="h6"
               sx={{ fontWeight: "bold", mt: 0.1, fontSize: "16px" }}
             >
-              Donor and Donations test
+              Donor and Donations
             </Typography>
 
             <Grid container spacing={1} sx={{ mt: 0.1 }}>
@@ -357,7 +357,7 @@ const DonorPrint = () => {
               </Grid>
             </Grid>
 
-            <Grid container spacing={0.3} sx={{ mt: 0.1 }}>
+            <Grid container spacing={0.2} sx={{ mt: 0.1 }}>
               <Grid item xs={12} sm={4}>
                 <Typography>Type of Donation:</Typography>
               </Grid>
@@ -450,7 +450,7 @@ const DonorPrint = () => {
           <Grid
             container
             spacing={1}
-            sx={{ mt: 2, justifyContent: "space-between" }}
+            sx={{ mt: 1, justifyContent: "space-between" }}
           >
             <Grid item>
               <Typography sx={{ fontSize: "10px" }}>Date: </Typography>
@@ -465,7 +465,7 @@ const DonorPrint = () => {
         {`
     @media print {
       @page {
-        size: A3;
+        size: A4;
         margin: 0 !important;
         padding: 0 !important;
       }
@@ -477,7 +477,7 @@ const DonorPrint = () => {
 
       #print-content {
         width: 100%;
-        height: 80vh;
+        height: 90vh;
         overflow: hidden;
         page-break-before: avoid !important;
         font-size: 10px !important;
