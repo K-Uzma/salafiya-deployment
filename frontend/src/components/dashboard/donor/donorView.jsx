@@ -233,7 +233,7 @@ const DonorView = () => {
                   {/* Reporting Person Information */}
                   <AdminInfo />
 
-                  <Grid container spacing={1} sx={{ mt: 0.1, mb: 1 }}>
+                  <Grid container spacing={1} sx={{ mt: 0.1, mb: 1,  fontSize: "10px !important" }}>
                     <Grid item xs={12} sm={4}>
                       <Typography>Date of approval/Notification:</Typography>
                     </Grid>
