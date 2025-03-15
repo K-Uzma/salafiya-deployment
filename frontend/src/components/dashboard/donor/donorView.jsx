@@ -71,20 +71,14 @@ const DonorView = () => {
     }, 1000); // Cleanup after printing
   };
 
-  // const handlePrint = () => {
-  //   if (isMobile) {
-  //     navigate("/print-donor", {
-  //       state: { donorId: location.state?.donorId || 0 },
-  //     });
-  //   } else {
-  //     handlePrintPage();
-  //   }
-  // };
-
   const handlePrint = () => {
-    navigate("/print-donor", {
-      state: { donorId: location.state?.donorId || 0 },
-    });
+    if (isMobile) {
+      navigate("/print-donor", {
+        state: { donorId: location.state?.donorId || 0 },
+      });
+    } else {
+      handlePrintPage();
+    }
   };
 
   const [donorData, setDonorData] = useState({});
