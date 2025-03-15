@@ -711,7 +711,7 @@ const DonorForm = () => {
 
               <Grid container spacing={0.3} sx={{ mt: 0.3 }}>
                 <Grid item xs={12}>
-                  <Typography sx={{ fontSize: "14px" }}>
+                  <Typography sx={{ fontSize: "10px" }}>
                     I, <strong>SHOAIB MOHAMMED</strong> son of{" "}
                     <strong>TAJODDIN</strong> solemnly declare that to the best
                     of my knowledge and belief, the information given in the
@@ -732,10 +732,10 @@ const DonorForm = () => {
               sx={{ mt: 2, justifyContent: "space-between" }}
             >
               <Grid item>
-                <Typography sx={{ fontSize: "14px" }}>Date: </Typography>
+                <Typography sx={{ fontSize: "10px" }}>Date: </Typography>
               </Grid>
               <Grid item>
-                <Typography sx={{ fontSize: "14px" }}>Signature:</Typography>
+                <Typography sx={{ fontSize: "10px" }}>Signature:</Typography>
               </Grid>
             </Grid>
           </div>

@@ -463,27 +463,27 @@ const DonorPrint = () => {
       </Paper>
       <style>
         {`
-    @media print {
-      @page {
-        size: A4;
-        margin: 0 !important;
-        padding: 0 !important;
-      }
+        @media print {
+          @page {
+            size: A4;
+            margin: 0 !important;
+            padding: 0 !important;
+          }
 
-      body {
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-      }
+          body {
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+          }
 
-      #print-content {
-        width: 100%;
-        height: 90vh;
-        overflow: hidden;
-        page-break-before: avoid !important;
-        font-size: 10px !important;
-      }
-    }
-  `}
+          #print-content {
+            width: 100%;
+            height: auto;
+            overflow: hidden;
+            page-break-before: avoid !important;
+            font-size: 10px !important;
+          }
+        }
+      `}
       </style>
     </>
   );
