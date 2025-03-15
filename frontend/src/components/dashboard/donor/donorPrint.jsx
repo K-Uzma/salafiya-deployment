@@ -133,18 +133,24 @@ const DonorPrint = () => {
     }
   }, [donorName, donorAddress, amountReceived, financialYear]);
 
+  useEffect(() => {
+    if (window.matchMedia("print").matches) {
+      document.body.style.zoom = "100%"; // Prevents zooming issues
+    }
+  }, []);
+
   return (
     <>
       <Paper elevation={3} sx={{ p: 3, textAlign: "start" }}>
         <div id="print-content">
           <Box
             sx={{
-              border: "1px solid black", // Border styling
-              borderRadius: "5px",
+              width: "210mm", // Ensures A4 width
+              minHeight: "297mm", // Ensures full A4 height
+              border: "1px solid black",
               padding: "15px",
-              maxWidth: "100%", // Adjust width as needed
-              margin: "auto", // Centering horizontally
               backgroundColor: "#fff",
+              margin: "auto",
             }}
           >
             {/* Reporting Person Information */}
@@ -464,28 +470,37 @@ const DonorPrint = () => {
       <style>
   {`
     @media print {
-      @page {
-        size: A4; /* Keep A4 page size */
-        margin: 0;
-      }
+  @page {
+    size: A4 portrait; /* Enforce A4 size */
+    margin: 10mm; /* Ensure consistent margin */
+  }
 
-      body {
-        -webkit-print-color-adjust: exact;
-        print-color-adjust: exact;
-      }
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
 
-      #print-content {
-        transform: scale(0.85); /* Adjust scale for mobile */
-        transform-origin: top left;
-        width: 100vw !important;
-        height: 95vh !important; /* Prevents cutting content */
-        overflow: hidden !important;
-      }
+  #print-content {
+    width: 210mm !important; /* Set A4 width */
+    min-height: 297mm !important; /* Set A4 height */
+    max-height: 297mm !important;
+    margin: auto;
+    padding: 10mm;
+    font-size: 12px; /* Adjust for better fit */
+  }
 
-      #print-content, #print-content * {
-        page-break-inside: avoid !important;
-      }
-    }
+  #print-content, #print-content * {
+    page-break-inside: avoid !important; /* Avoid breaking cards */
+  }
+
+  /* Prevents mobile from resizing */
+  html, body {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+}
+
   `}
 </style>
 
