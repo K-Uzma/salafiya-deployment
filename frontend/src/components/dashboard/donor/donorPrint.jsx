@@ -135,7 +135,7 @@ const DonorPrint = () => {
 
   return (
     <>
-      <Paper elevation={3} sx={{ p: 3, textAlign: "start" }}>
+      <Paper elevation={3} sx={{ p: 2, textAlign: "start" }}>
         <div id="print-content">
           <Box
             sx={{
@@ -150,7 +150,7 @@ const DonorPrint = () => {
             {/* Reporting Person Information */}
             <AdminInfo />
 
-            <Grid container spacing={1} sx={{ mt: 0.2, mb: 2 }}>
+            <Grid container spacing={1} sx={{ mt: 0.1, mb: 1 }}>
               <Grid item xs={12} sm={4}>
                 <Typography>Date of approval/Notification:</Typography>
               </Grid>
@@ -174,12 +174,12 @@ const DonorPrint = () => {
             {/* Donor and Donations */}
             <Typography
               variant="h6"
-              sx={{ fontWeight: "bold", mt: 0.2, fontSize: "16px" }}
+              sx={{ fontWeight: "bold", mt: 0.1, fontSize: "16px" }}
             >
               Donor and Donations
             </Typography>
 
-            <Grid container spacing={1} sx={{ mt: 0.2 }}>
+            <Grid container spacing={1} sx={{ mt: 0.1 }}>
               <Grid item xs={12} sm={4}>
                 <Typography>Unique Identification Number:</Typography>
               </Grid>
@@ -283,7 +283,7 @@ const DonorPrint = () => {
               </Grid>
             </Grid>
 
-            <Grid container spacing={1} sx={{ mt: 0.2 }}>
+            <Grid container spacing={1} sx={{ mt: 0.1 }}>
               <Grid item xs={12} sm={4}>
                 <Typography>Name of Donor:</Typography>
               </Grid>
@@ -302,7 +302,7 @@ const DonorPrint = () => {
               </Grid>
             </Grid>
 
-            <Grid container spacing={1} sx={{ mt: 0.2 }}>
+            <Grid container spacing={1} sx={{ mt: 0.1 }}>
               <Grid item xs={12} sm={4}>
                 <Typography>Address of Donor:</Typography>
               </Grid>
@@ -323,7 +323,7 @@ const DonorPrint = () => {
               </Grid>
             </Grid>
 
-            <Grid container spacing={1} sx={{ mt: 0.2 }}>
+            <Grid container spacing={1} sx={{ mt: 0.1 }}>
               <Grid item xs={12} sm={4}>
                 <Typography>Amount of Donation Received:</Typography>
               </Grid>
@@ -340,7 +340,7 @@ const DonorPrint = () => {
               </Grid>
             </Grid>
 
-            <Grid container spacing={1} sx={{ mt: 0.2 }}>
+            <Grid container spacing={1} sx={{ mt: 0.1 }}>
               <Grid item xs={12} sm={4}>
                 <Typography>Financial Year:</Typography>
               </Grid>
@@ -357,7 +357,7 @@ const DonorPrint = () => {
               </Grid>
             </Grid>
 
-            <Grid container spacing={0.3} sx={{ mt: 0.2 }}>
+            <Grid container spacing={0.3} sx={{ mt: 0.1 }}>
               <Grid item xs={12} sm={4}>
                 <Typography>Type of Donation:</Typography>
               </Grid>
@@ -430,9 +430,9 @@ const DonorPrint = () => {
               </Grid>
             </Grid>
 
-            <Grid container spacing={0.3} sx={{ mt: 0.3 }}>
+            <Grid container spacing={0.3} sx={{ mt: 0.1 }}>
               <Grid item xs={12}>
-                <Typography sx={{ fontSize: "14px" }}>
+                <Typography sx={{ fontSize: "10px" }}>
                   I, <strong>SHOAIB MOHAMMED</strong> son of{" "}
                   <strong>TAJODDIN</strong> solemnly declare that to the best of
                   my knowledge and belief, the information given in the
@@ -453,10 +453,10 @@ const DonorPrint = () => {
             sx={{ mt: 2, justifyContent: "space-between" }}
           >
             <Grid item>
-              <Typography sx={{ fontSize: "14px" }}>Date: </Typography>
+              <Typography sx={{ fontSize: "10px" }}>Date: </Typography>
             </Grid>
             <Grid item>
-              <Typography sx={{ fontSize: "14px" }}>Signature:</Typography>
+              <Typography sx={{ fontSize: "10px" }}>Signature:</Typography>
             </Grid>
           </Grid>
         </div>
@@ -477,7 +477,7 @@ const DonorPrint = () => {
 
       #print-content {
         width: 100%;
-        height: 100vh;
+        height: 90vh;
         overflow: hidden;
         page-break-before: avoid !important;
         font-size: 10px !important;
