@@ -445,20 +445,25 @@ const DonorPrint = () => {
                 </Typography>
               </Grid>
             </Grid>
-          </Box>
 
-          <Grid
-            container
-            spacing={1}
-            sx={{ mt: 1, justifyContent: "space-between" }}
-          >
-            <Grid item>
-              <Typography sx={{ fontSize: "10px" }}>Date: </Typography>
+            <Grid
+              container
+              spacing={1}
+              sx={{
+                mt: 2,
+                mb: 2,
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <Grid item>
+                <Typography sx={{ fontSize: "10px" }}>Date: </Typography>
+              </Grid>
+              <Grid item sx={{ pr: 25 }}>
+                <Typography sx={{ fontSize: "10px" }}>Signature:</Typography>
+              </Grid>
             </Grid>
-            <Grid item>
-              <Typography sx={{ fontSize: "10px" }}>Signature:</Typography>
-            </Grid>
-          </Grid>
+          </Box>
         </div>
       </Paper>
       <style>

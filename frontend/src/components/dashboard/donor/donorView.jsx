@@ -194,7 +194,7 @@ const DonorView = () => {
     </Box>
   ) : (
     <Box sx={{ display: "flex" }}>
-      {!isPrinting ? (<CssBaseline />) : null}
+      {!isPrinting ? <CssBaseline /> : null}
       <Sidebar />
       <Container sx={{ flexGrow: 1 }}>
         {Object.keys(donorData).length === 0 ? (
@@ -233,7 +233,11 @@ const DonorView = () => {
                   {/* Reporting Person Information */}
                   <AdminInfo />
 
-                  <Grid container spacing={1} sx={{ mt: 0.1, mb: 1,  fontSize: "10px !important" }}>
+                  <Grid
+                    container
+                    spacing={1}
+                    sx={{ mt: 0.1, mb: 1, fontSize: "10px !important" }}
+                  >
                     <Grid item xs={12} sm={4}>
                       <Typography>Date of approval/Notification:</Typography>
                     </Grid>
@@ -543,22 +547,27 @@ const DonorView = () => {
                       </Typography>
                     </Grid>
                   </Grid>
-                </Box>
 
-                <Grid
-                  container
-                  spacing={1}
-                  sx={{ mt: 1, justifyContent: "space-between" }}
-                >
-                  <Grid item>
-                    <Typography sx={{ fontSize: "10px" }}>Date: </Typography>
+                  <Grid
+                    container
+                    spacing={1}
+                    sx={{
+                      mt: 2,
+                      mb: 2,
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Grid item>
+                      <Typography sx={{ fontSize: "10px" }}>Date: </Typography>
+                    </Grid>
+                    <Grid item sx={{ pr: 25 }}>
+                      <Typography sx={{ fontSize: "10px" }}>
+                        Signature:
+                      </Typography>
+                    </Grid>
                   </Grid>
-                  <Grid item>
-                    <Typography sx={{ fontSize: "10px" }}>
-                      Signature:
-                    </Typography>
-                  </Grid>
-                </Grid>
+                </Box>
               </div>
 
               {!isPrinting ? (
