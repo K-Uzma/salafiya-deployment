@@ -204,9 +204,9 @@ const DonorList = () => {
     const formattedData = data.map((item) => ({
       "Donor Name": item.donor_name,
       "PAN Number": item.pan_id,
+      "Aadhar Number": item.aadhar_id,
       "Financial Year": item.financial_year,
       "Donated Amount": item.donation_received,
-      // "Aadhar Number": item.aadhar_id,
       // "Phone Number": item.mobile,
       // Address: item.donor_address,
       "Donation Type": formatDonationType(item.donation_type),
