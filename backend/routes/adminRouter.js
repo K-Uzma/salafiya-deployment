@@ -3,7 +3,10 @@ const router = express.Router();
 const pool = require("../db");
 const bcrypt = require("bcryptjs");
 const generateToken = require("../utils/auth");
-const { dateConversion } = require("../utils/common-functions");
+const {
+  dateConversion,
+  convertObjectToProcedureParams,
+} = require("../utils/common-functions");
 const authMiddleware = require("../middleware/auth");
 const mysql = require("mysql");
 
@@ -155,6 +158,33 @@ router.delete(
 
       return res.status(200).json({
         message: "Donor Record Deleted Successfully!",
+      });
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ error: "Internal Server Error", details: error.message });
+    }
+  }
+);
+
+//editDonorByID
+router.patch(
+  "/api/admin/edit-donor-by-id",
+  authMiddleware,
+  async (req, res) => {
+    try {
+      const { donorId, ...otherFields } = req.body;
+
+      const formattedParams = convertObjectToProcedureParams(otherFields);
+
+      const storedProcedure = "CALL UpdateAdminDonors(?, ?)";
+      await pool.execute(storedProcedure, [
+        formattedParams,
+        `scaid_id = '${donorId}'`,
+      ]);
+
+      return res.status(200).json({
+        message: `Donor Updated Successfully!`,
       });
     } catch (error) {
       return res

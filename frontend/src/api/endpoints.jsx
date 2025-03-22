@@ -16,6 +16,9 @@ const api = {
 
   //deleteDonorByID
   deleteDonorByID: "admin/delete-donor-by-id/",
+
+  //editDonorByID
+  editDonorByID: "admin/edit-donor-by-id",
 };
 
 export default api;

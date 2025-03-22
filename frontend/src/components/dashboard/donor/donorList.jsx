@@ -205,10 +205,10 @@ const DonorList = () => {
       "Donor Name": item.donor_name,
       "PAN Number": item.pan_id,
       "Aadhar Number": item.aadhar_id,
+      Address: item.donor_address,
       "Financial Year": item.financial_year,
       "Donated Amount": item.donation_received,
       // "Phone Number": item.mobile,
-      // Address: item.donor_address,
       "Donation Type": formatDonationType(item.donation_type),
       // "Section Eligible for Deduction": formatDonationSection(
       //   item.donation_section

@@ -49,3 +49,12 @@ export const DeleteDonorByID = async (id) => {
     throw error;
   }
 };
+
+export const EditDonorByID = async (data) => {
+  try {
+    const response = await axios.patch(`${apiUrl}${api.editDonorByID}`, data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

@@ -12,12 +12,20 @@ import {
   Checkbox,
   FormControlLabel,
   useMediaQuery,
+  IconButton,
+  MenuItem,
+  Tooltip,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import Sidebar from "../../common/sidebar";
-import { DonorDetailByID } from "../../../api/modules/donorModule";
+import {
+  DonorDetailByID,
+  EditDonorByID,
+} from "../../../api/modules/donorModule";
 import { useLocation, useNavigate } from "react-router-dom";
 import AdminInfo from "./adminInfo";
+import { toast } from "react-toastify";
+import { Close, Edit } from "@mui/icons-material";
 
 const DonorView = () => {
   const location = useLocation();
@@ -26,6 +34,7 @@ const DonorView = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isPrinting = window.matchMedia("print").matches;
   const donorId = location.state?.donorId || 0; // Get donor ID from state
+  const [isPrintPage, setIsPrintPage] = useState(false);
 
   const printRef = useRef();
 
@@ -67,20 +76,40 @@ const DonorView = () => {
     iframe.contentWindow.print();
 
     setTimeout(() => {
+      setIsPrintPage(false);
       document.body.removeChild(iframe);
     }, 1000); // Cleanup after printing
   };
 
   const handlePrint = () => {
+    setIsEditing(false);
     if (isMobile) {
       navigate("/print-donor", {
         state: { donorId: location.state?.donorId || 0 },
       });
     } else {
-      handlePrintPage();
+      // handlePrintPage();
+      setIsPrintPage(true);
     }
   };
 
+  useEffect(() => {
+    if (isPrintPage) {
+      handlePrintPage();
+    }
+  }, [isPrintPage]);
+
+  const currentYear = new Date().getFullYear();
+  const financialYears = Array.from(
+    { length: currentYear - 1990 + 1 },
+    (_, i) => {
+      const startYear = currentYear - i;
+      return `${startYear}-${startYear + 1}`;
+    }
+  );
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [formLoading, setFormLoading] = useState(false);
   const [donorData, setDonorData] = useState({});
   const [loading, setLoading] = useState(false);
   // const [date, setDate] = useState(moment().format("YYYY-MM-DD"));
@@ -103,6 +132,14 @@ const DonorView = () => {
     section35_1_iia: false,
     section35_1_iii: false,
   });
+
+  const panRefs = useRef([]);
+  const aadharRefs = useRef([]);
+  const mobileRefs = useRef([]);
+
+  const [aadharErrors, setAadharErrors] = useState(Array(12).fill(""));
+  const [mobileErrors, setMobileErrors] = useState(Array(10).fill(""));
+  const [panErrors, setPanErrors] = useState(Array(10).fill(""));
 
   const fetchData = async () => {
     setLoading(true);
@@ -178,6 +215,195 @@ const DonorView = () => {
       setDeductionSection(deductionSection);
     }
   }, [donorData]);
+
+  const handleToggleEdit = () => {
+    if (isEditing) {
+      //When clicked on close icon button
+      fetchData();
+    }
+    setIsEditing((prev) => !prev);
+  };
+
+  const handleBoxChange =
+    (index, setFunction, length, refs, setErrorFunction, type) => (e) => {
+      const value = e.target.value.toUpperCase();
+
+      // Define validation rule:
+      // - PAN should allow alphanumeric characters
+      // - Aadhar & Mobile should allow only numbers
+      const isValid =
+        type === "numeric" ? /^[0-9]?$/.test(value) : /^[A-Z0-9]?$/.test(value); // Alphanumeric for PAN
+
+      // Get current values based on function
+      let newValues = [
+        ...(setFunction === setPan
+          ? pan
+          : setFunction === setAadhar
+          ? aadhar
+          : mobile),
+      ];
+
+      let newErrors = [
+        ...(setErrorFunction === setAadharErrors
+          ? aadharErrors
+          : setFunction === setPan
+          ? panErrors
+          : mobileErrors),
+      ];
+
+      if (!isValid) {
+        newErrors[index] = "Invalid";
+      } else {
+        newErrors[index] = "";
+      }
+
+      setErrorFunction(newErrors);
+
+      if (isValid) {
+        newValues[index] = value;
+        setFunction(newValues);
+
+        // Move to the next field if input is valid and not the last field
+        if (value && index < length - 1) {
+          refs.current[index + 1]?.focus();
+        }
+      }
+    };
+
+  const handleKeyDown = (index, setFunction, refs) => (e) => {
+    if (e.key === "Backspace") {
+      let newValues = [
+        ...(setFunction === setPan
+          ? pan
+          : setFunction === setAadhar
+          ? aadhar
+          : mobile),
+      ];
+      newValues[index] = ""; // Clear the current field
+      setFunction(newValues);
+
+      // Move focus to the previous field if not the first
+      if (index > 0) {
+        refs.current[index - 1]?.focus();
+      }
+    }
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    if (pan.some((char) => char.trim() === "")) {
+      toast.error("PAN is required");
+      return;
+    }
+
+    if (aadhar.some((char) => char.trim() === "")) {
+      toast.error("Aadhar is required");
+      return;
+    }
+
+    if (!/^[0-9]{12}$/.test(aadhar.join(""))) {
+      toast.error("Aadhar must be a 12-digit number");
+      return;
+    }
+
+    if (mobile.some((char) => char.trim() === "")) {
+      toast.error("Mobile number is required");
+      return;
+    }
+
+    if (!/^[0-9]{10}$/.test(mobile.join(""))) {
+      toast.error("Mobile number must be a 10-digit number");
+      return;
+    }
+
+    if (!donorName.trim()) {
+      toast.error("Name of Donor is required");
+      return;
+    }
+
+    if (!/^[A-Za-z ]+$/.test(donorName.trim())) {
+      toast.error("Name of Donor must contain only alphabets and spaces");
+      return;
+    }
+
+    if (!donorAddress.trim()) {
+      toast.error("Address of Donor is required");
+      return;
+    }
+
+    if (!amountReceived.trim()) {
+      toast.error("Amount of Donation Received is required");
+      return;
+    }
+
+    if (!/^\d{1,3}(,\d{2,3})*(\/-)?$|^\d+(\/-)?$/.test(amountReceived.trim())) {
+      toast.error("Amount must be a valid number (e.g., 25,000/- or 2000)");
+      return;
+    }
+
+    if (!financialYear) {
+      toast.error("Financial Year is required");
+      return;
+    }
+
+    if (
+      !typeDonation.corpus &&
+      !typeDonation.specificGrants &&
+      !typeDonation.others
+    ) {
+      toast.error("At least one Type of Donation must be selected");
+      return;
+    }
+
+    if (
+      !deductionSection.section80G &&
+      !deductionSection.section35_1_ii &&
+      !deductionSection.section35_1_iia &&
+      !deductionSection.section35_1_iii
+    ) {
+      toast.error("At least one Donation Deduction Section must be selected");
+      return;
+    }
+
+    // If all validations pass, submit the form data
+    const formData = {
+      donorId: donorId || 0,
+      pan_id: pan.join(""),
+      aadhar_id: aadhar.join(""),
+      mobile: mobile.join(""),
+      donor_name: donorName,
+      donor_address: donorAddress,
+      donation_received: amountReceived,
+      financial_year: financialYear,
+      donation_type: Object.keys(typeDonation)
+        .filter((key) => typeDonation[key])
+        .join(","),
+
+      donation_section: Object.keys(deductionSection)
+        .filter((key) => deductionSection[key])
+        .join(","),
+    };
+
+    try {
+      setFormLoading(true);
+      const response = await EditDonorByID(formData);
+
+      setIsEditing(false);
+      fetchData();
+
+      panRefs.current.forEach((ref) => ref && (ref.value = ""));
+      aadharRefs.current.forEach((ref) => ref && (ref.value = ""));
+      mobileRefs.current.forEach((ref) => ref && (ref.value = ""));
+
+      toast.success(response.message);
+    } catch (error) {
+      setFormLoading(false);
+      toast.error(`${error.response?.data?.error}`);
+    } finally {
+      setFormLoading(false);
+    }
+  };
 
   return loading ? (
     <Box
@@ -261,12 +487,49 @@ const DonorView = () => {
                   <hr />
 
                   {/* Donor and Donations */}
-                  <Typography
-                    variant="h6"
-                    sx={{ fontWeight: "bold", mt: 0.2, fontSize: "16px" }}
-                  >
-                    Donor and Donations
-                  </Typography>
+                  {isPrinting ? (
+                    <Typography
+                      variant="h6"
+                      sx={{ fontWeight: "bold", mt: 0.2, fontSize: "16px" }}
+                    >
+                      Donor and Donations
+                    </Typography>
+                  ) : (
+                    <Box
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="space-between"
+                    >
+                      <Typography
+                        variant="h6"
+                        sx={{ fontWeight: "bold", mt: 0.2, fontSize: "16px" }}
+                      >
+                        Donor and Donations
+                      </Typography>
+                      {!isPrintPage && (
+                        <Tooltip
+                          title={isEditing ? "Cancel Edit" : "Edit Donor"}
+                        >
+                          <IconButton
+                            onClick={handleToggleEdit}
+                            sx={{
+                              backgroundColor: isEditing
+                                ? "#F44336"
+                                : "#4CAF50",
+                              color: "#fff",
+                              "&:hover": {
+                                backgroundColor: isEditing
+                                  ? "#D32F2F"
+                                  : "#388E3C",
+                              },
+                            }}
+                          >
+                            {isEditing ? <Close /> : <Edit />}
+                          </IconButton>
+                        </Tooltip>
+                      )}
+                    </Box>
+                  )}
 
                   <Grid container spacing={1} sx={{ mt: 0.1 }}>
                     <Grid item xs={12} sm={4}>
@@ -279,28 +542,76 @@ const DonorView = () => {
                           <Typography>PAN:</Typography>
                         </Grid>
                         <Grid item xs={12} sm={10}>
-                          <Box
-                            sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}
-                          >
-                            {pan.map((char, index) => (
-                              <TextField
-                                key={index}
-                                value={char}
-                                size="small"
-                                sx={{
-                                  width: { xs: "5%", sm: "20px" },
-                                  minWidth: "20px",
-                                  textAlign: "center",
-                                  "& .MuiInputBase-input": {
+                          {!isPrinting && isEditing ? (
+                            <Box
+                              sx={{
+                                display: "flex",
+                                gap: 0.5,
+                                flexWrap: "wrap",
+                              }}
+                            >
+                              {pan.map((char, index) => (
+                                <TextField
+                                  key={index}
+                                  inputRef={(el) =>
+                                    (panRefs.current[index] = el)
+                                  }
+                                  value={char}
+                                  onChange={handleBoxChange(
+                                    index,
+                                    setPan,
+                                    10,
+                                    panRefs,
+                                    setPanErrors,
+                                    "alphanumeric"
+                                  )}
+                                  onKeyDown={handleKeyDown(
+                                    index,
+                                    setPan,
+                                    panRefs
+                                  )}
+                                  size="small"
+                                  sx={{
+                                    width: { xs: "8%", sm: "30px" },
+                                    minWidth: "25px",
                                     textAlign: "center",
-                                    p: 0,
-                                  },
-                                }}
-                                inputProps={{ maxLength: 1 }}
-                                disabled={true}
-                              />
-                            ))}
-                          </Box>
+                                    "& .MuiInputBase-input": {
+                                      textAlign: "center",
+                                      p: 0,
+                                    },
+                                  }}
+                                  inputProps={{ maxLength: 1 }}
+                                />
+                              ))}
+                            </Box>
+                          ) : (
+                            <Box
+                              sx={{
+                                display: "flex",
+                                gap: 0.5,
+                                flexWrap: "wrap",
+                              }}
+                            >
+                              {pan.map((char, index) => (
+                                <TextField
+                                  key={index}
+                                  value={char}
+                                  size="small"
+                                  sx={{
+                                    width: { xs: "5%", sm: "20px" },
+                                    minWidth: "20px",
+                                    textAlign: "center",
+                                    "& .MuiInputBase-input": {
+                                      textAlign: "center",
+                                      p: 0,
+                                    },
+                                  }}
+                                  inputProps={{ maxLength: 1 }}
+                                  disabled={true}
+                                />
+                              ))}
+                            </Box>
+                          )}
                         </Grid>
                       </Grid>
 
@@ -315,28 +626,82 @@ const DonorView = () => {
                           <Typography>Aadhar:</Typography>
                         </Grid>
                         <Grid item xs={12} sm={10}>
-                          <Box
-                            sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}
-                          >
-                            {aadhar.map((char, index) => (
-                              <TextField
-                                key={index}
-                                value={char}
-                                size="small"
-                                sx={{
-                                  width: { xs: "5%", sm: "20px" },
-                                  minWidth: "20px",
-                                  textAlign: "center",
-                                  "& .MuiInputBase-input": {
+                          {!isPrinting && isEditing ? (
+                            <Box
+                              sx={{
+                                display: "flex",
+                                gap: 0.5,
+                                flexWrap: "wrap",
+                              }}
+                            >
+                              {aadhar.map((char, index) => (
+                                <TextField
+                                  key={index}
+                                  inputRef={(el) =>
+                                    (aadharRefs.current[index] = el)
+                                  }
+                                  value={char}
+                                  onChange={handleBoxChange(
+                                    index,
+                                    setAadhar,
+                                    12,
+                                    aadharRefs,
+                                    setAadharErrors,
+                                    "numeric"
+                                  )}
+                                  onKeyDown={handleKeyDown(
+                                    index,
+                                    setAadhar,
+                                    aadharRefs
+                                  )}
+                                  size="small"
+                                  sx={{
+                                    width: { xs: "7%", sm: "30px" },
+                                    minWidth: "25px",
                                     textAlign: "center",
-                                    p: 0,
-                                  },
-                                }}
-                                inputProps={{ maxLength: 1 }}
-                                disabled={true}
-                              />
-                            ))}
-                          </Box>
+                                    "& .MuiInputBase-input": {
+                                      textAlign: "center",
+                                      p: 0,
+                                    },
+                                  }}
+                                  inputProps={{
+                                    maxLength: 1,
+                                    inputMode: "numeric", // Ensures numeric keyboard stays
+                                    pattern: "[0-9]*", // Enforces numeric input
+                                  }}
+                                  error={!!aadharErrors[index]}
+                                  helperText={aadharErrors[index]}
+                                />
+                              ))}
+                            </Box>
+                          ) : (
+                            <Box
+                              sx={{
+                                display: "flex",
+                                gap: 0.5,
+                                flexWrap: "wrap",
+                              }}
+                            >
+                              {aadhar.map((char, index) => (
+                                <TextField
+                                  key={index}
+                                  value={char}
+                                  size="small"
+                                  sx={{
+                                    width: { xs: "5%", sm: "20px" },
+                                    minWidth: "20px",
+                                    textAlign: "center",
+                                    "& .MuiInputBase-input": {
+                                      textAlign: "center",
+                                      p: 0,
+                                    },
+                                  }}
+                                  inputProps={{ maxLength: 1 }}
+                                  disabled={true}
+                                />
+                              ))}
+                            </Box>
+                          )}
                         </Grid>
                       </Grid>
 
@@ -351,28 +716,82 @@ const DonorView = () => {
                           <Typography>Mobile:</Typography>
                         </Grid>
                         <Grid item xs={12} sm={10}>
-                          <Box
-                            sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}
-                          >
-                            {mobile.map((char, index) => (
-                              <TextField
-                                key={index}
-                                value={char}
-                                size="small"
-                                sx={{
-                                  width: { xs: "5%", sm: "20px" },
-                                  minWidth: "20px",
-                                  textAlign: "center",
-                                  "& .MuiInputBase-input": {
+                          {!isPrinting && isEditing ? (
+                            <Box
+                              sx={{
+                                display: "flex",
+                                gap: 0.5,
+                                flexWrap: "wrap",
+                              }}
+                            >
+                              {mobile.map((char, index) => (
+                                <TextField
+                                  key={index}
+                                  inputRef={(el) =>
+                                    (mobileRefs.current[index] = el)
+                                  }
+                                  value={char}
+                                  onChange={handleBoxChange(
+                                    index,
+                                    setMobile,
+                                    10,
+                                    mobileRefs,
+                                    setMobileErrors,
+                                    "numeric"
+                                  )}
+                                  onKeyDown={handleKeyDown(
+                                    index,
+                                    setMobile,
+                                    mobileRefs
+                                  )}
+                                  size="small"
+                                  sx={{
+                                    width: { xs: "9%", sm: "30px" },
+                                    minWidth: "25px",
                                     textAlign: "center",
-                                    p: 0,
-                                  },
-                                }}
-                                inputProps={{ maxLength: 1 }}
-                                disabled={true}
-                              />
-                            ))}
-                          </Box>
+                                    "& .MuiInputBase-input": {
+                                      textAlign: "center",
+                                      p: 0,
+                                    },
+                                  }}
+                                  inputProps={{
+                                    maxLength: 1,
+                                    inputMode: "numeric", // Ensures numeric keyboard stays
+                                    pattern: "[0-9]*", // Enforces numeric input
+                                  }}
+                                  error={!!mobileErrors[index]}
+                                  helperText={mobileErrors[index]}
+                                />
+                              ))}
+                            </Box>
+                          ) : (
+                            <Box
+                              sx={{
+                                display: "flex",
+                                gap: 0.5,
+                                flexWrap: "wrap",
+                              }}
+                            >
+                              {mobile.map((char, index) => (
+                                <TextField
+                                  key={index}
+                                  value={char}
+                                  size="small"
+                                  sx={{
+                                    width: { xs: "5%", sm: "20px" },
+                                    minWidth: "20px",
+                                    textAlign: "center",
+                                    "& .MuiInputBase-input": {
+                                      textAlign: "center",
+                                      p: 0,
+                                    },
+                                  }}
+                                  inputProps={{ maxLength: 1 }}
+                                  disabled={true}
+                                />
+                              ))}
+                            </Box>
+                          )}
                         </Grid>
                       </Grid>
                     </Grid>
@@ -383,17 +802,22 @@ const DonorView = () => {
                       <Typography>Name of Donor:</Typography>
                     </Grid>
                     <Grid item xs={12} sm={8}>
-                      <Box sx={{ display: "flex" }}>
-                        <Typography sx={{ fontWeight: "bold" }}>
-                          {donorName}
-                        </Typography>
-                        {/* <TextField
-                        fullWidth
-                        size="small"
-                        value={donorName}
-                        disabled={true}
-                      /> */}
-                      </Box>
+                      {!isPrinting && isEditing ? (
+                        <Box sx={{ display: "flex", gap: 1 }}>
+                          <TextField
+                            fullWidth
+                            size="small"
+                            value={donorName}
+                            onChange={(e) => setDonorName(e.target.value)}
+                          />
+                        </Box>
+                      ) : (
+                        <Box sx={{ display: "flex" }}>
+                          <Typography sx={{ fontWeight: "bold" }}>
+                            {donorName}
+                          </Typography>
+                        </Box>
+                      )}
                     </Grid>
                   </Grid>
 
@@ -402,19 +826,24 @@ const DonorView = () => {
                       <Typography>Address of Donor:</Typography>
                     </Grid>
                     <Grid item xs={12} sm={8}>
-                      <Box sx={{ display: "flex" }}>
-                        <Typography sx={{ fontWeight: "bold" }}>
-                          {donorAddress}
-                        </Typography>
-                        {/* <TextField
-                        fullWidth
-                        size="small"
-                        multiline
-                        rows={5}
-                        value={donorAddress}
-                        disabled={true}
-                      /> */}
-                      </Box>
+                      {!isPrinting && isEditing ? (
+                        <Box sx={{ display: "flex", gap: 1 }}>
+                          <TextField
+                            fullWidth
+                            size="small"
+                            multiline
+                            rows={5}
+                            value={donorAddress}
+                            onChange={(e) => setDonorAddress(e.target.value)}
+                          />
+                        </Box>
+                      ) : (
+                        <Box sx={{ display: "flex" }}>
+                          <Typography sx={{ fontWeight: "bold" }}>
+                            {donorAddress}
+                          </Typography>
+                        </Box>
+                      )}
                     </Grid>
                   </Grid>
 
@@ -423,15 +852,18 @@ const DonorView = () => {
                       <Typography>Amount of Donation Received:</Typography>
                     </Grid>
                     <Grid item xs={12} sm={8}>
-                      <Typography sx={{ fontWeight: "bold" }}>
-                        {amountReceived}
-                      </Typography>
-                      {/* <TextField
-                      fullWidth
-                      size="small"
-                      value={amountReceived}
-                      disabled={true}
-                    /> */}
+                      {!isPrinting && isEditing ? (
+                        <TextField
+                          fullWidth
+                          size="small"
+                          value={amountReceived}
+                          onChange={(e) => setAmountReceived(e.target.value)}
+                        />
+                      ) : (
+                        <Typography sx={{ fontWeight: "bold" }}>
+                          {amountReceived}
+                        </Typography>
+                      )}
                     </Grid>
                   </Grid>
 
@@ -440,15 +872,25 @@ const DonorView = () => {
                       <Typography>Financial Year:</Typography>
                     </Grid>
                     <Grid item xs={12} sm={8}>
-                      <Typography sx={{ fontWeight: "bold" }}>
-                        {financialYear}
-                      </Typography>
-                      {/* <TextField
-                      fullWidth
-                      size="small"
-                      value={financialYear}
-                      disabled={true}
-                    /> */}
+                      {!isPrinting && isEditing ? (
+                        <TextField
+                          select
+                          fullWidth
+                          size="small"
+                          value={financialYear}
+                          onChange={(e) => setFinancialYear(e.target.value)}
+                        >
+                          {financialYears.map((year) => (
+                            <MenuItem key={year} value={year}>
+                              {year}
+                            </MenuItem>
+                          ))}
+                        </TextField>
+                      ) : (
+                        <Typography sx={{ fontWeight: "bold" }}>
+                          {financialYear}
+                        </Typography>
+                      )}
                     </Grid>
                   </Grid>
 
@@ -456,79 +898,187 @@ const DonorView = () => {
                     <Grid item xs={12} sm={4}>
                       <Typography>Type of Donation:</Typography>
                     </Grid>
-                    <Grid item xs={12} sm={8}>
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={typeDonation.corpus}
-                            disabled={true}
-                          />
-                        }
-                        label="Corpus"
-                      />
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={typeDonation.specificGrants}
-                            disabled={true}
-                          />
-                        }
-                        label="Specific Grants"
-                      />
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={typeDonation.others}
-                            disabled={true}
-                          />
-                        }
-                        label="Others"
-                      />
-                    </Grid>
+                    {!isPrinting && isEditing ? (
+                      <Grid item xs={12} sm={8}>
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={typeDonation.corpus}
+                              onChange={(e) =>
+                                setTypeDonation({
+                                  ...typeDonation,
+                                  corpus: e.target.checked,
+                                })
+                              }
+                            />
+                          }
+                          label="Corpus"
+                        />
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={typeDonation.specificGrants}
+                              onChange={(e) =>
+                                setTypeDonation({
+                                  ...typeDonation,
+                                  specificGrants: e.target.checked,
+                                })
+                              }
+                            />
+                          }
+                          label="Specific Grants"
+                        />
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={typeDonation.others}
+                              onChange={(e) =>
+                                setTypeDonation({
+                                  ...typeDonation,
+                                  others: e.target.checked,
+                                })
+                              }
+                            />
+                          }
+                          label="Others"
+                        />
+                      </Grid>
+                    ) : (
+                      <Grid item xs={12} sm={8}>
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={typeDonation.corpus}
+                              disabled={true}
+                            />
+                          }
+                          label="Corpus"
+                        />
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={typeDonation.specificGrants}
+                              disabled={true}
+                            />
+                          }
+                          label="Specific Grants"
+                        />
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={typeDonation.others}
+                              disabled={true}
+                            />
+                          }
+                          label="Others"
+                        />
+                      </Grid>
+                    )}
                   </Grid>
 
                   <Grid container spacing={0}>
                     <Grid item xs={12} sm={4}>
                       <Typography>Section Eligible for Deduction:</Typography>
                     </Grid>
-                    <Grid item xs={12} sm={8}>
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={deductionSection.section80G}
-                            disabled={true}
-                          />
-                        }
-                        label="Section 80G(5)(vi)"
-                      />
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={deductionSection.section35_1_ii}
-                            disabled={true}
-                          />
-                        }
-                        label="Section 35(1)(ii)"
-                      />
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={deductionSection.section35_1_iia}
-                            disabled={true}
-                          />
-                        }
-                        label="Section 35(1)(iia)"
-                      />
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={deductionSection.section35_1_iii}
-                            disabled={true}
-                          />
-                        }
-                        label="Section 35(1)(iii)"
-                      />
-                    </Grid>
+                    {!isPrinting && isEditing ? (
+                      <Grid item xs={12} sm={8}>
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={deductionSection.section80G}
+                              onChange={(e) =>
+                                setDeductionSection({
+                                  ...deductionSection,
+                                  section80G: e.target.checked,
+                                })
+                              }
+                            />
+                          }
+                          label="Section 80G(5)(vi)"
+                        />
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={deductionSection.section35_1_ii}
+                              onChange={(e) =>
+                                setDeductionSection({
+                                  ...deductionSection,
+                                  section35_1_ii: e.target.checked,
+                                })
+                              }
+                            />
+                          }
+                          label="Section 35(1)(ii)"
+                        />
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={deductionSection.section35_1_iia}
+                              onChange={(e) =>
+                                setDeductionSection({
+                                  ...deductionSection,
+                                  section35_1_iia: e.target.checked,
+                                })
+                              }
+                            />
+                          }
+                          label="Section 35(1)(iia)"
+                        />
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={deductionSection.section35_1_iii}
+                              onChange={(e) =>
+                                setDeductionSection({
+                                  ...deductionSection,
+                                  section35_1_iii: e.target.checked,
+                                })
+                              }
+                            />
+                          }
+                          label="Section 35(1)(iii)"
+                        />
+                      </Grid>
+                    ) : (
+                      <Grid item xs={12} sm={8}>
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={deductionSection.section80G}
+                              disabled={true}
+                            />
+                          }
+                          label="Section 80G(5)(vi)"
+                        />
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={deductionSection.section35_1_ii}
+                              disabled={true}
+                            />
+                          }
+                          label="Section 35(1)(ii)"
+                        />
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={deductionSection.section35_1_iia}
+                              disabled={true}
+                            />
+                          }
+                          label="Section 35(1)(iia)"
+                        />
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={deductionSection.section35_1_iii}
+                              disabled={true}
+                            />
+                          }
+                          label="Section 35(1)(iii)"
+                        />
+                      </Grid>
+                    )}
                   </Grid>
 
                   <Grid container spacing={0.3} sx={{ mt: 0.3 }}>
@@ -579,13 +1129,35 @@ const DonorView = () => {
                     mt: 3,
                   }}
                 >
-                  <Button
-                    variant="contained"
-                    size="small"
-                    onClick={handlePrint}
-                  >
-                    Print
-                  </Button>
+                  {isEditing ? (
+                    <>
+                      {formLoading ? (
+                        <Button
+                          variant="contained"
+                          size="small"
+                          disabled={true}
+                        >
+                          <CircularLoader />
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="contained"
+                          size="small"
+                          onClick={handleSubmit}
+                        >
+                          Save Changes
+                        </Button>
+                      )}
+                    </>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      size="small"
+                      onClick={handlePrint}
+                    >
+                      Print
+                    </Button>
+                  )}
                 </Box>
               ) : null}
             </Paper>
