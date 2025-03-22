@@ -26,6 +26,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import AdminInfo from "./adminInfo";
 import { toast } from "react-toastify";
 import { Close, Edit } from "@mui/icons-material";
+import CircularLoader from "../../common/CircularLoader";
 
 const DonorView = () => {
   const location = useLocation();
